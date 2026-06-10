@@ -9,6 +9,6 @@ third_page = st.Page("hellostreamlit.py", title="Hello Streamlit", icon="👋")
 
 # Group pages and initialize navigation
 # Run navigation
-nav = st.navigation([home_page, another_page, third_page], position="sidebar", expanded=True)
+nav = st.navigation([home_page, another_page, third_page], position="sidebar", expanded=False)
 
 nav.run()
