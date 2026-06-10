@@ -19,32 +19,35 @@
             --sidebar-width: 280px;
         }
 
-        body {
+        body, html {
             margin: 0;
             padding: 0;
+            height: 100%;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #f8fafc;
             color: var(--text-dark);
             -webkit-font-smoothing: antialiased;
+            overflow: hidden; /* Prevents body double-scrolling */
         }
 
+        /* Flexbox Viewport Split Wrapper (Ensures 0% Layer Overlapping) */
         .wrapper {
             display: flex;
-            min-height: 100vh;
+            width: 100vw;
+            height: 100vh;
         }
 
-        /* Fixed Executive Sidebar */
+        /* Clean Sidebar Assembly Layout */
         aside {
             width: var(--sidebar-width);
+            min-width: var(--sidebar-width);
             background-color: var(--slate-900);
             color: white;
             padding: 40px 24px;
             display: flex;
             flex-direction: column;
-            position: fixed;
-            height: calc(100vh - 80px);
-            border-right: 1px solid rgba(255,255,255,0.05);
-            z-index: 100;
+            box-sizing: border-box;
+            height: 100%;
         }
 
         .profile-section {
@@ -78,40 +81,36 @@
         nav {
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            flex-grow: 1;
+            gap: 10px;
         }
 
+        /* High-Value Interactive Button Links */
         .nav-btn {
             display: flex;
             align-items: center;
-            background: none;
+            background-color: transparent;
             border: none;
             color: #94a3b8;
-            padding: 12px 16px;
-            font-size: 0.9rem;
-            font-weight: 500;
+            padding: 14px 18px;
+            font-size: 0.95rem;
+            font-weight: 600;
             border-radius: 8px;
             cursor: pointer;
             text-align: left;
             transition: all 0.2s ease;
             width: 100%;
+            box-sizing: border-box;
         }
 
         .nav-btn:hover {
             color: white;
-            background-color: rgba(255,255,255,0.03);
+            background-color: rgba(255,255,255,0.04);
         }
 
         .nav-btn.active {
             color: white;
             background-color: var(--teal-500);
-            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
-        }
-
-        .nav-icon {
-            margin-right: 12px;
-            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(13, 148, 136, 0.25);
         }
 
         .cv-container {
@@ -125,12 +124,13 @@
             background-color: rgba(255,255,255,0.05);
             color: white;
             text-decoration: none;
-            padding: 12px;
+            padding: 14px;
             border-radius: 8px;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 600;
             border: 1px solid rgba(255,255,255,0.1);
             transition: all 0.2s ease;
+            box-sizing: border-box;
         }
 
         .cv-action:hover {
@@ -138,17 +138,19 @@
             color: var(--slate-900);
         }
 
-        /* Main Workspace Panel */
+        /* Independent Scrolling Work Stage */
         main {
-            margin-left: calc(var(--sidebar-width) + 48px);
-            padding: 50px 50px 50px 0;
             flex-grow: 1;
-            max-width: 1100px;
+            height: 100%;
+            overflow-y: auto; /* Restricts scrolling specifically to content panel */
+            padding: 60px 80px;
+            box-sizing: border-box;
         }
 
         .view-panel {
             display: none;
-            animation: fadeIn 0.3s ease-out forwards;
+            max-width: 850px;
+            animation: fadeIn 0.2s ease-out forwards;
         }
 
         .view-panel.active {
@@ -156,12 +158,12 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
+            from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .header-meta h2 {
-            font-size: 1.85rem;
+            font-size: 2rem;
             font-weight: 700;
             margin: 0 0 8px 0;
             letter-spacing: -0.03em;
@@ -169,12 +171,11 @@
         }
 
         .header-meta p {
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: var(--text-light);
-            margin: 0 0 32px 0;
+            margin: 0 0 40px 0;
         }
 
-        /* Metrics Grid Layout */
         .metrics-container {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -187,7 +188,7 @@
             border: 1px solid var(--border-color);
             border-radius: 10px;
             padding: 16px 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.01);
         }
 
         .metric-label {
@@ -205,14 +206,14 @@
             color: var(--slate-900);
         }
 
-        /* Application Project Cards */
         .project-card {
             background: white;
             border: 1px solid var(--border-color);
             border-radius: 14px;
             padding: 40px;
-            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.04);
+            box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.03);
             margin-bottom: 30px;
+            box-sizing: border-box;
         }
 
         .project-card h3 {
@@ -224,20 +225,19 @@
         .project-card p {
             color: var(--text-light);
             font-size: 1rem;
-            margin: 0 0 24px 0;
+            margin: 0 0 28px 0;
             line-height: 1.6;
         }
 
-        /* Executive Launch Buttons */
         .launch-btn {
             display: inline-flex;
             align-items: center;
             background-color: var(--teal-500);
             color: white;
             text-decoration: none;
-            padding: 12px 24px;
+            padding: 14px 28px;
             border-radius: 8px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             font-weight: 600;
             transition: all 0.2s ease;
             box-shadow: 0 4px 12px rgba(13, 148, 136, 0.15);
@@ -247,16 +247,6 @@
             background-color: var(--teal-600);
             transform: translateY(-1px);
             box-shadow: 0 6px 16px rgba(13, 148, 136, 0.25);
-        }
-
-        .launch-btn .icon {
-            margin-left: 8px;
-            font-size: 1rem;
-            transition: transform 0.2s;
-        }
-
-        .launch-btn:hover .icon {
-            transform: translateX(3px);
         }
 
         .summary-grid {
@@ -285,17 +275,19 @@
 <body>
 
     <div class="wrapper">
-        <!-- Sidebar Menu Navigation Section -->
+        <!-- Sidebar Navigation Component -->
         <aside>
             <div class="profile-section">
-                <img src="profile_pic.jpeg" alt="Louka Abed" class="profile-frame" onerror="this.src='https://placehold.co'">
+                <img src="profile.jpg" alt="Louka Abed" class="profile-frame" onerror="this.src='https://placehold.co'">
                 <h1>Louka Abed</h1>
                 <p>Clinical Data Scientist</p>
             </div>
+            
             <nav>
-                <button class="nav-btn active" onclick="navigatePanel(event, 'dashboard-bio')">👤 Executive Profile</button>
-                <button class="nav-btn" onclick="navigatePanel(event, 'dashboard-projects')">📊 Production Applications</button>
+                <button class="nav-btn active" onclick="navigatePanel(event, 'panel-bio')">👤 Executive Profile</button>
+                <button class="nav-btn" onclick="navigatePanel(event, 'panel-projects')">📊 Production Apps</button>
             </nav>
+
             <div class="cv-container">
                 <a href="resume.pdf" class="cv-action" download="Louka_Abed_CV.pdf">Curriculum Vitae (PDF)</a>
             </div>
@@ -303,8 +295,8 @@
 
         <!-- Right Side Interface Screen Workspace -->
         <main>
-            <!-- WORKSPACE PANEL 1: PROFESSIONAL PROFILE BIOGRAPHY -->
-            <section id="dashboard-bio" class="view-panel active">
+            <!-- PANEL 1: EXECUTIVE BRIEF VIEW -->
+            <section id="panel-bio" class="view-panel active">
                 <div class="header-meta">
                     <h2>Executive Brief & Core Competencies</h2>
                     <p>Clinical infrastructure development, statistical programming engineering, and regulatory data product pipelines.</p>
@@ -312,6 +304,7 @@
                 <div class="project-card">
                     <h3>Strategic Overview</h3>
                     <p>Advanced Clinical Data Scientist with a proven track record of optimizing data infrastructures for high-stakes pharmaceutical drug development pipelines. Expert in converting complex clinical trial matrix streams into robust, validated data products. Specializing in cross-functional clinical operation support, biostatistics data validation automation, and regulatory compliant visual computing architectures.</p>
+                    
                     <div class="summary-grid">
                         <div class="grid-block">
                             <h4>Core Domain Expertise</h4>
