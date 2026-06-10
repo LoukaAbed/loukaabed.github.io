@@ -31,20 +31,14 @@
             overflow: hidden;
         }
 
-        /* 
-           CSS GRID LAYOUT SPLIT (The Core Fix)
-           Forces the sidebar and main section into separate columns.
-           This makes it impossible for components to overlap or block mouse clicks.
-        */
+        /* Strict dual-column layout separation */
         .wrapper {
             display: grid;
             grid-template-columns: var(--sidebar-width) 1fr;
             width: 100vw;
             height: 100vh;
-            position: relative;
         }
 
-        /* Isolated Left Navigation Column */
         aside {
             background-color: var(--slate-900);
             color: white;
@@ -53,8 +47,6 @@
             flex-direction: column;
             box-sizing: border-box;
             height: 100vh;
-            position: relative;
-            z-index: 10; /* Keeps sidebar links on the top layer */
         }
 
         .profile-section {
@@ -81,7 +73,6 @@
             gap: 10px;
         }
 
-        /* Fully Interactive Sidebar Buttons */
         .nav-btn {
             display: flex;
             align-items: center;
@@ -97,7 +88,6 @@
             transition: all 0.2s ease;
             width: 100%;
             box-sizing: border-box;
-            pointer-events: auto; /* Explicitly forces browser tracking */
         }
 
         .nav-btn:hover { color: white; background-color: rgba(255,255,255,0.04); }
@@ -125,14 +115,11 @@
         }
         .cv-action:hover { background-color: white; color: var(--slate-900); }
 
-        /* Isolated Right Content Pane */
         main {
             height: 100vh;
             overflow-y: auto;
             padding: 60px 80px;
             box-sizing: border-box;
-            position: relative;
-            z-index: 1;
         }
 
         .content-container {
@@ -181,11 +168,7 @@
             font-weight: 600;
         }
 
-        .metric-value {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--slate-900);
-        }
+        .metric-value { font-size: 1.3rem; font-weight: 700; color: var(--slate-900); }
 
         .project-card {
             background: white;
@@ -200,7 +183,7 @@
         .project-card h3 { font-size: 1.4rem; margin: 0 0 12px 0; letter-spacing: -0.02em; }
         .project-card p { color: var(--text-light); font-size: 1rem; margin: 0 0 28px 0; line-height: 1.6; }
 
-        /* Secure App Viewport Structure */
+        /* Secure Dynamic Sandbox Wrapper Box */
         .app-display-box {
             width: 100%;
             height: 750px;
@@ -226,7 +209,6 @@
 <body>
 
     <div class="wrapper">
-        <!-- Sidebar Navigation (Z-Indexed to prevent overlaps) -->
         <aside>
             <div class="profile-section">
                 <img src="profile.jpg" alt="Louka Abed" class="profile-frame" onerror="this.src='https://placehold.co'">
@@ -235,9 +217,9 @@
             </div>
             
             <nav>
-                <button id="btn-bio" class="nav-btn active" onclick="switchPanel('panel-bio', 'btn-bio')">👤 Executive Profile</button>
-                <button id="btn-streamlit" class="nav-btn" onclick="switchPanel('panel-streamlit', 'btn-streamlit')">📊 Streamlit App</button>
-                <button id="btn-shiny" class="nav-btn" onclick="switchPanel('panel-shiny', 'btn-shiny')">🔬 Posit Shiny App</button>
+                <button id="btn-bio" class="nav-btn active" onclick="switchPanel('panel-bio', 'btn-bio', '')">👤 Executive Profile</button>
+                <button id="btn-streamlit" class="nav-btn" onclick="switchPanel('panel-streamlit', 'btn-streamlit', 'streamlit')">📊 Streamlit App</button>
+                <button id="btn-shiny" class="nav-btn" onclick="switchPanel('panel-shiny', 'btn-shiny', 'shiny')">🔬 Posit Shiny App</button>
             </nav>
 
             <div class="cv-container">
@@ -245,7 +227,6 @@
             </div>
         </aside>
 
-        <!-- Right Side Interface Screen Workspace -->
         <main>
             <div class="content-container">
                 
@@ -267,3 +248,17 @@
                                 <h4>Technical Stack Optimization</h4>
                                 <p>High-performance computing cluster integrations leveraging Python and R ecosystems, database cluster schema engineering, and secure production environments container deployment pipelines.</p>
                             </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- PANEL 2: STREAMLIT PYTHON CONTAINER -->
+                <section id="panel-streamlit" class="view-panel">
+                    <div class="header-meta">
+                        <h2>Clinical Data Insight Engine</h2>
+                        <p>Automated endpoint parsing and responsive data manipulation pipelines running live on your cloud execution cluster.</p>
+                    </div>
+                    <div class="project-card">
+                        <div class="metrics-container">
+                            <div class="metric-card">
+                                <div class="metric-label">Pipeline Status</div>
