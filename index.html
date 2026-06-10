@@ -23,6 +23,7 @@
             margin: 0;
             padding: 0;
             height: 100%;
+            width: 100%;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: #f8fafc;
             color: var(--text-dark);
@@ -30,24 +31,30 @@
             overflow: hidden;
         }
 
-        /* Prevent overlapping elements grid layout */
+        /* 
+           CSS GRID LAYOUT SPLIT (The Core Fix)
+           Forces the sidebar and main section into separate columns.
+           This makes it impossible for components to overlap or block mouse clicks.
+        */
         .wrapper {
-            display: flex;
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
             width: 100vw;
             height: 100vh;
+            position: relative;
         }
 
-        /* Fixed Left Navigation Sidebar */
+        /* Isolated Left Navigation Column */
         aside {
-            width: var(--sidebar-width);
-            min-width: var(--sidebar-width);
             background-color: var(--slate-900);
             color: white;
             padding: 40px 24px;
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
-            height: 100%;
+            height: 100vh;
+            position: relative;
+            z-index: 10; /* Keeps sidebar links on the top layer */
         }
 
         .profile-section {
@@ -74,7 +81,7 @@
             gap: 10px;
         }
 
-        /* Interactive Sidebar Navigation Links */
+        /* Fully Interactive Sidebar Buttons */
         .nav-btn {
             display: flex;
             align-items: center;
@@ -90,6 +97,7 @@
             transition: all 0.2s ease;
             width: 100%;
             box-sizing: border-box;
+            pointer-events: auto; /* Explicitly forces browser tracking */
         }
 
         .nav-btn:hover { color: white; background-color: rgba(255,255,255,0.04); }
@@ -117,13 +125,14 @@
         }
         .cv-action:hover { background-color: white; color: var(--slate-900); }
 
-        /* Scrollable Workboard Space */
+        /* Isolated Right Content Pane */
         main {
-            flex-grow: 1;
-            height: 100%;
+            height: 100vh;
             overflow-y: auto;
             padding: 60px 80px;
             box-sizing: border-box;
+            position: relative;
+            z-index: 1;
         }
 
         .content-container {
@@ -132,7 +141,7 @@
         }
 
         .view-panel {
-            display: none; /* Controlled via clean JavaScript display mappings */
+            display: none;
             animation: fadeIn 0.2s ease-out forwards;
         }
 
@@ -191,7 +200,7 @@
         .project-card h3 { font-size: 1.4rem; margin: 0 0 12px 0; letter-spacing: -0.02em; }
         .project-card p { color: var(--text-light); font-size: 1rem; margin: 0 0 28px 0; line-height: 1.6; }
 
-        /* High-Value Secure Iframe Application Viewport Wrapper */
+        /* Secure App Viewport Structure */
         .app-display-box {
             width: 100%;
             height: 750px;
@@ -217,6 +226,7 @@
 <body>
 
     <div class="wrapper">
+        <!-- Sidebar Navigation (Z-Indexed to prevent overlaps) -->
         <aside>
             <div class="profile-section">
                 <img src="profile.jpg" alt="Louka Abed" class="profile-frame" onerror="this.src='https://placehold.co'">
@@ -224,7 +234,6 @@
                 <p>Clinical Data Scientist</p>
             </div>
             
-            <!-- Fixed Navigation Buttons Mapping -->
             <nav>
                 <button id="btn-bio" class="nav-btn active" onclick="switchPanel('panel-bio', 'btn-bio')">👤 Executive Profile</button>
                 <button id="btn-streamlit" class="nav-btn" onclick="switchPanel('panel-streamlit', 'btn-streamlit')">📊 Streamlit App</button>
@@ -236,10 +245,11 @@
             </div>
         </aside>
 
+        <!-- Right Side Interface Screen Workspace -->
         <main>
             <div class="content-container">
                 
-                <!-- PANEL 1: BIOGRAPHY COMPONENT -->
+                <!-- PANEL 1: EXECUTIVE BRIEF -->
                 <section id="panel-bio" class="view-panel active">
                     <div class="header-meta">
                         <h2>Executive Brief & Core Competencies</h2>
@@ -257,11 +267,3 @@
                                 <h4>Technical Stack Optimization</h4>
                                 <p>High-performance computing cluster integrations leveraging Python and R ecosystems, database cluster schema engineering, and secure production environments container deployment pipelines.</p>
                             </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- PANEL 2: STREAMLIT PYTHON CONTAINER -->
-                <section id="panel-streamlit" class="view-panel">
-                    <div class="header-meta">
-                        <h2>Clinical Data Insight Engine</h2>
