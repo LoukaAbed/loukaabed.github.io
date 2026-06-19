@@ -1,25 +1,30 @@
 import streamlit as st
 import smtplib
+import os  # Native operating system communications module
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 def transmit_pharma_lead(recruiter_name, recruiter_email, lead_subject, lead_body):
-    """Establishes an explicit secure TLS layer handshake over Google Workspace SMTP relays."""
+    """Establishes a secure connection using Hugging Face Space Environment Variables."""
     try:
-        # Load credentials directly from secure runtime secrets dictionary mapping
-        smtp_target_host = st.secrets["email_server"]["smtp_server"]
-        smtp_target_port = st.secrets["email_server"]["port"]
-        authenticated_user = st.secrets["email_server"]["sender_email"]
-        app_specific_token = st.secrets["email_server"]["password"]
+        # Hardcode standard Google settings, fetch password securely from Hugging Face
+        smtp_target_host = "://gmail.com"
+        smtp_target_port = 587
+        authenticated_user = "contact@loukaabed.com"
+        
+        # This line reads your hidden password directly from your Hugging Face settings panel
+        app_specific_token = os.environ.get("EMAIL_PASSWORD")
 
-        # Formulate explicit multi-part MIME payload headers
+        if not app_specific_token:
+            return False, "Configuration Error: EMAIL_PASSWORD secret not found in Hugging Face settings."
+
+        # Formulate email headers
         email_payload = MIMEMultipart()
         email_payload['From'] = authenticated_user
-        email_payload['To'] = authenticated_user  # Route incoming requests to your inbox
+        email_payload['To'] = authenticated_user  
         email_payload['Reply-To'] = recruiter_email
         email_payload['Subject'] = f"💼 Pharma Recruiting: {lead_subject}"
 
-        # Clean string layout structural formatting
         formatted_message = (
             f"Sender Name / Title: {recruiter_name}\n"
             f"Direct Return Route: {recruiter_email}\n\n"
@@ -27,16 +32,14 @@ def transmit_pharma_lead(recruiter_name, recruiter_email, lead_subject, lead_bod
         )
         email_payload.attach(MIMEText(formatted_message, 'plain', 'utf-8'))
 
-        # Instantiate dedicated socket connection mapping to Google Workspace relays
+        # Connect to Google SMTP servers
         network_socket = smtplib.SMTP(smtp_target_host, smtp_target_port)
-        network_socket.ehlo()  # Explicitly ping host to announce client capabilities
-        network_socket.starttls()  # Encrypt session context traffic natively 
+        network_socket.ehlo()      
+        network_socket.starttls()  
         network_socket.ehlo()
         
-        # Authenticate session utilizing your unique Google App Password context
+        # Authenticate session
         network_socket.login(authenticated_user, app_specific_token)
-        
-        # Dispatch traffic across the established link structure
         network_socket.sendmail(authenticated_user, authenticated_user, email_payload.as_string())
         network_socket.quit()
         return True, "Transmission deployed safely."
@@ -44,13 +47,12 @@ def transmit_pharma_lead(recruiter_name, recruiter_email, lead_subject, lead_bod
     except smtplib.SMTPAuthenticationError:
         return False, "Google Workspace authentication failed. Confirm your 16-character App Password."
     except Exception as network_exception:
-        return False, f"Network initialization anomaly encountered: {str(network_exception)}"
+        return False, f"Network initialization error: {str(network_exception)}"
 
 # --- STREAMLIT GRAPHICAL RENDERING LAYER ---
 st.title("📬 Connect to Dr. Louka Abed's Desk")
 st.write("Route strategic pharmaceutical inquiries or trial architecture reviews directly to my enterprise inbox.")
 
-# Establish atomic transactional form loop logic 
 with st.form("secure_contact_gateway", clear_on_submit=True):
     col_left, col_right = st.columns(2)
     
@@ -66,13 +68,13 @@ with st.form("secure_contact_gateway", clear_on_submit=True):
 
     if dispatch_trigger:
         if not input_name or not input_email or not input_message:
-            st.warning("All primary communication channels require population before deployment.")
+            st.warning("All fields are required before deployment.")
         elif "@" not in input_email:
-            st.error("The parameters provided do not map to a standard structured syntax for email configurations.")
+            st.error("Please enter a valid email address.")
         else:
-            with st.spinner("Initializing cryptographic pipeline to Google Workspace relays..."):
+            with st.spinner("Initializing pipeline to Google Workspace..."):
                 is_sent, status_log = transmit_pharma_lead(input_name, input_email, input_subject, input_message)
                 if is_sent:
-                    st.success("Success! Message safely intercepted by Google Workspace and routed to contact@loukaabed.com.")
+                    st.success("Success! Message safely delivered to contact@loukaabed.com.")
                 else:
                     st.error(status_log)
