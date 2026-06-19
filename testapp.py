@@ -9,6 +9,6 @@ third_page = st.Page("hellostreamlit.py", title="Hello Streamlit", icon="👋")
 fourth_page = st.Page('sas.py', title='SAS Experience', icon='👋')
 # Group pages and initialize navigation
 # Run navigation
-nav = st.navigation([home_page, another_page, third_page])
+nav = st.navigation([home_page, another_page, third_page, fourth_page])
 
 nav.run()
