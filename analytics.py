@@ -3,34 +3,29 @@ import streamlit as st
 import saspy
 
 st.title("📊 SAS Cloud Analytics Engine")
-st.write("This workspace authenticates and executes queries on-demand.")
+st.write("This workspace authenticates and executes queries on-demand via secure web sockets.")
 
 # --- BACKGROUND SYSTEM PROFILE GENERATOR ---
 def initialize_sas_profile():
-    JAVA_PATH = "/usr/bin/java"
-    ODA_SERVER = "odaws01-usw2-2.oda.sas.com" # Region 2 server
+    # Target your specific Region 2 assigned workspace domain
+    ODA_SERVER = "odaws01-usw2-2.oda.sas.com" 
 
-    # Fetch secrets cleanly
+    # Safely extract your secrets from Hugging Face settings
     sas_user = st.secrets["SAS_USER"]
     sas_pass = st.secrets["SAS_PASSWORD"] if "SAS_PASSWORD" in st.secrets else st.secrets["SAS_PASS"]
 
-    # Generate a headless profile file directly in the container home directory
-    home_directory = os.path.expanduser("~")
-    authinfo_path = os.path.join(home_directory, ".authinfo")
-    
-    with open(authinfo_path, "w") as f:
-        f.write(f"oda user {sas_user} password {sas_pass}\n")
-    os.chmod(authinfo_path, 0o600)
-
-    # Write localized personal configuration mapping block
+    # FORCE THE HTTP WEB DRIVER PROFILE: Completely removed 'java' and 'iomport' keys.
+    # Passing the exact 'url' parameters tells SASPy to bypass local JAR classpaths.
     config_content = f"""
 SAS_config_names = ['oda']
 oda = {{
-    'java': '{JAVA_PATH}',
     'iomhost': '{ODA_SERVER}',
-    'iomport': 8591,
-    'authkey': 'oda',
-    'encoding': 'utf-8'
+    'url': 'https://{ODA_SERVER}:443',
+    'user': '{sas_user}',
+    'pw': '{sas_pass}',
+    'encoding': 'utf-8',
+    'omr': False,
+    'appname': 'StreamlitHF'
 }}
 """
     config_file_path = os.path.abspath("sascfg_personal.py")
@@ -44,6 +39,7 @@ oda = {{
 def load_subpage_sas_session():
     try:
         cfg_path = initialize_sas_profile()
+        # Launch session using the native python driver config profile
         sas = saspy.SASsession(cfgfile=cfg_path, cfgname="oda")
         return sas
     except Exception as e:
@@ -54,11 +50,15 @@ def load_subpage_sas_session():
 sas_session = load_subpage_sas_session()
 
 if sas_session:
-    st.success("✅ Securely connected to SAS OnDemand for Academics.")
+    st.success("✅ Securely connected to SAS OnDemand for Academics via Web Sockets.")
     
     # Simple operational testing block
     sas_code = "proc print data=sashelp.class(obs=5); run;"
     res = sas_session.submit(sas_code)
-    st.html(res['LST'])
+    
+    if res.get('LST'):
+        st.html(res['LST'])
+    else:
+        st.code(res.get('LOG', 'No log returned.'), language="sas")
 else:
     st.error("❌ Failed to initiate underlying SAS cloud connection.")
