@@ -14,14 +14,16 @@ fourth_page = st.Page('sas.py', title='SAS Experience', icon='👋')
 JAVA_PATH = "/usr/bin/java"
 ODA_SERVER = "odaws01-usw2-2.oda.sas.com"
 
+# Network Fix: Added direct HTTPS URL configuration to bypass Hugging Face firewall port restrictions
 config_content = f"""
 SAS_config_names = ['oda']
 oda = {{
     'java': '{JAVA_PATH}',
     'iomhost': '{ODA_SERVER}',
-    'iomport': 8591,
+    'url': 'https://{ODA_SERVER}:443',
     'authkey': 'oda_auth',
-    'encoding': 'utf-8'
+    'encoding': 'utf-8',
+    'omr': False
 }}
 """
 
@@ -29,24 +31,20 @@ config_file_path = os.path.abspath("sascfg_personal.py")
 with open(config_file_path, "w") as f:
     f.write(config_content)
 
-os.environ["_SAS_SERVER_"] = "odaws01-usw2-2.oda.sas.com"
+# Pass credentials securely from Hugging Face secrets into SASPy runtime variables
+os.environ["_SAS_SERVER_"] = ODA_SERVER
 os.environ["_SAS_USER_"] = st.secrets["SAS_USER"]
 os.environ["_SAS_PASS_"] = st.secrets["SAS_PASSWORD"]
 
-@st.cache_resource  # <-- 1. Guard: Checks memory. If connection exists, skips the code below.
+@st.cache_resource
 def get_sas_session():
     try:
-        # <-- 2. Worker: Only runs ONCE to build the initial cloud tunnel.
+        # Establish connection using configuration file and HTTP protocol proxy
         sas = saspy.SASsession(cfgfile=config_file_path, cfgname="oda")
         return sas
     except Exception as e:
-        return None
-
-def get_sas_session():
-    try:
-        sas = saspy.SASsession(cfgfile=config_file_path, cfgname="oda")
-        return sas
-    except Exception as e:
+        # Catch and display exact error trace inside the app sidebar for easy debugging
+        st.sidebar.error(f"Internal SASPy Connection Error: {e}")
         return None
 
 # Attempt backend connection and cache it globally
@@ -67,7 +65,8 @@ if sas_session:
         st.switch_page(fourth_page)
 else:
     st.error("❌ Failed to initiate underlying SAS cloud connection. Check Hugging Face Secrets setup logs.")
+    st.info("💡 Look closely at your application's left sidebar to inspect the direct error code output from SASPy.")
 
-# Group pages and initialize navigation (Updated to include your target pages)
+# Group pages and initialize navigation 
 nav = st.navigation([home_page, third_page, fourth_page])
 nav.run()
