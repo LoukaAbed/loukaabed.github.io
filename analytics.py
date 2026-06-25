@@ -1,56 +1,68 @@
 import os
 import streamlit as st
 import saspy
+import concurrent.futures
 
 st.title("📊 SAS Cloud Analytics Engine")
-st.write("This workspace authenticates and executes queries on-demand via secure web sockets.")
+st.write("This workspace connects to the ODA servers independently without impacting your home page.")
 
-# --- BACKGROUND SYSTEM PROFILE GENERATOR ---
-def initialize_sas_profile():
-    # Target your specific Region 2 assigned workspace domain
-    ODA_SERVER = "odaws01-usw2-2.oda.sas.com" 
+# --- BACKGROUND SYSTEM WORKER ---
+def build_sas_profile_and_connect():
+    JAVA_PATH = "/usr/bin/java"
+    ODA_SERVER = "odaws01-usw2-2.oda.sas.com" # Region 2 server
 
-    # Safely extract your secrets from Hugging Face settings
+    # Safely extract your hidden secrets
     sas_user = st.secrets["SAS_USER"]
     sas_pass = st.secrets["SAS_PASSWORD"] if "SAS_PASSWORD" in st.secrets else st.secrets["SAS_PASS"]
 
-    # FORCE THE HTTP WEB DRIVER PROFILE: Completely removed 'java' and 'iomport' keys.
-    # Passing the exact 'url' parameters tells SASPy to bypass local JAR classpaths.
+    # Generate a headless profile file directly in the container home directory to stop EOF prompts
+    home_directory = os.path.expanduser("~")
+    authinfo_path = os.path.join(home_directory, ".authinfo")
+    with open(authinfo_path, "w") as f:
+        f.write(f"oda user {sas_user} password {sas_pass}\n")
+    os.chmod(authinfo_path, 0o600)
+
+    # Re-apply the stable Java connection mapping block
     config_content = f"""
 SAS_config_names = ['oda']
 oda = {{
+    'java': '{JAVA_PATH}',
     'iomhost': '{ODA_SERVER}',
-    'url': 'https://{ODA_SERVER}:443',
-    'user': '{sas_user}',
-    'pw': '{sas_pass}',
-    'encoding': 'utf-8',
-    'omr': False,
-    'appname': 'StreamlitHF'
+    'iomport': 8591,
+    'authkey': 'oda',
+    'encoding': 'utf-8'
 }}
 """
     config_file_path = os.path.abspath("sascfg_personal.py")
     with open(config_file_path, "w") as f:
         f.write(config_content)
         
-    return config_file_path
+    # Return the opened session directly
+    return saspy.SASsession(cfgfile=config_file_path, cfgname="oda")
 
-# Cache the connection locally within this specific subpage instance
-@st.cache_resource
+
+# --- TIMEOUT PROTECTED CACHE ENGINE ---
+@st.cache_resource(show_spinner="Connecting to SAS Cloud Engine...")
 def load_subpage_sas_session():
-    try:
-        cfg_path = initialize_sas_profile()
-        # Launch session using the native python driver config profile
-        sas = saspy.SASsession(cfgfile=cfg_path, cfgname="oda")
-        return sas
-    except Exception as e:
-        st.error(f"Engine connection failed: {e}")
-        return None
+    # Force connection process into a separate thread to break infinite loading loops
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        future = executor.submit(build_sas_profile_and_connect)
+        try:
+            # Cut the loop off if it takes longer than 15 seconds to reply
+            sas_instance = future.result(timeout=15)
+            return sas_instance
+        except concurrent.futures.TimeoutError:
+            st.error("⌛ The SAS Cloud connection timed out (Server took too long to reply).")
+            return "TIMEOUT"
+        except Exception as e:
+            st.error(f"❌ Internal System Error: {e}")
+            return None
 
-# Trigger connection ONLY when the user is actively visiting this subpage
+# Trigger connection exclusively inside this view state
 sas_session = load_subpage_sas_session()
 
-if sas_session:
-    st.success("✅ Securely connected to SAS OnDemand for Academics via Web Sockets.")
+if sas_session and sas_session != "TIMEOUT":
+    st.success("✅ Securely connected to SAS OnDemand for Academics.")
     
     # Simple operational testing block
     sas_code = "proc print data=sashelp.class(obs=5); run;"
@@ -60,5 +72,5 @@ if sas_session:
         st.html(res['LST'])
     else:
         st.code(res.get('LOG', 'No log returned.'), language="sas")
-else:
-    st.error("❌ Failed to initiate underlying SAS cloud connection.")
+elif sas_session == "TIMEOUT":
+    st.info("💡 The SAS server did not acknowledge the container handshake. Try clicking another tab and returning here to re-trigger.")
