@@ -12,28 +12,40 @@ fourth_page = st.Page('sas.py', title='SAS Experience', icon='👋')
 
 # --- BACKEND SAS CONFIGURATION ENGINE ---
 JAVA_PATH = "/usr/bin/java"
-ODA_SERVER = "odaws01-usw2-2.oda.sas.com"
+ODA_SERVER = "odaws01-usw2-2.oda.sas.com" # Region 2 server
 
-# Safely extract secrets first
+# 1. Safely extract credentials from Hugging Face secrets
 sas_user_credential = st.secrets["SAS_USER"]
-
 if "SAS_PASSWORD" in st.secrets:
     sas_pass_credential = st.secrets["SAS_PASSWORD"]
 else:
     sas_pass_credential = st.secrets["SAS_PASS"]
 
-# FIX: Injected 'user' and 'pw' explicitly into the connection definition dictionary.
-# Dropped 'authkey' entirely to prevent the Java sub-process from triggering a prompt loop.
+# 2. WRITE THE SYSTEM AUTHINFO FILE (Fixes the EOF Prompt Engine Error)
+# On Linux, SASPy inherently looks for a .authinfo file inside the user's home directory.
+home_directory = os.path.expanduser("~")
+authinfo_path = os.path.join(home_directory, ".authinfo")
+
+# Create the standard .authinfo file structure required by SAS IOM Java drivers
+authinfo_content = f"oda user {sas_user_credential} password {sas_pass_credential}\n"
+
+with open(authinfo_path, "w") as f:
+    f.write(authinfo_content)
+
+# Linux security permission rule: .authinfo MUST be user-readable only (600), or SASPy rejects it.
+os.chmod(authinfo_path, 0o600)
+
+
+# 3. GENERATE THE SECURE CONFIGURATION DICTIONARY
+# Note that we match 'authkey': 'oda' with the string prefix used inside the .authinfo file.
 config_content = f"""
 SAS_config_names = ['oda']
 oda = {{
     'java': '{JAVA_PATH}',
     'iomhost': '{ODA_SERVER}',
-    'url': 'https://{ODA_SERVER}:443',
-    'user': '{sas_user_credential}',
-    'pw': '{sas_pass_credential}',
-    'encoding': 'utf-8',
-    'omr': False
+    'iomport': 8591,
+    'authkey': 'oda',
+    'encoding': 'utf-8'
 }}
 """
 
@@ -41,15 +53,11 @@ config_file_path = os.path.abspath("sascfg_personal.py")
 with open(config_file_path, "w") as f:
     f.write(config_content)
 
-# Also expose variables to the broader environment layer for fallback redundancy
-os.environ["_SAS_SERVER_"] = ODA_SERVER
-os.environ["_SAS_USER_"] = sas_user_credential
-os.environ["_SAS_PASS_"] = sas_pass_credential
 
 @st.cache_resource
 def get_sas_session():
     try:
-        # Establish connection using explicit parameters
+        # Establish connection using the file-based auth token engine
         sas = saspy.SASsession(cfgfile=config_file_path, cfgname="oda")
         return sas
     except Exception as e:
