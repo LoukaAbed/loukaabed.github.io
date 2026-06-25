@@ -10,15 +10,16 @@ another_page = st.Page("analytics.py", title="test", icon="📊")
 third_page = st.Page("hellostreamlit.py", title="test", icon="👋")
 fourth_page = st.Page('sas.py', title='SAS Experience', icon='👋')
 
-# --- BACKEND SAS CONFIGURATION ENGINE ---
+# --- BACKEND SAS CONFIGURATION ENGINE (Bypassing Hugging Face EOF Drops) ---
 JAVA_PATH = "/usr/bin/java"
-ODA_SERVER = "odaws01-usw2-2.oda.sas.com"
+ODA_SERVER = "://sas.com"
 
-# Network Fix: Added direct HTTPS URL configuration to bypass Hugging Face firewall port restrictions
+# Added javaoptions to stop immediate EOF drops caused by strict SSL/TLS handshake failures
 config_content = f"""
 SAS_config_names = ['oda']
 oda = {{
     'java': '{JAVA_PATH}',
+    'javaoptions': '-Djsse.enableSNIExtension=false',
     'iomhost': '{ODA_SERVER}',
     'url': 'https://{ODA_SERVER}:443',
     'authkey': 'oda_auth',
@@ -35,7 +36,6 @@ with open(config_file_path, "w") as f:
 os.environ["_SAS_SERVER_"] = ODA_SERVER
 os.environ["_SAS_USER_"] = st.secrets["SAS_USER"]
 
-# FIX: Dynamic fallback loop to ensure the secret key is found regardless of naming choice
 if "SAS_PASSWORD" in st.secrets:
     os.environ["_SAS_PASS_"] = st.secrets["SAS_PASSWORD"]
 else:
