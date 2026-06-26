@@ -4,8 +4,8 @@ import pandas as pd
 st.set_page_config(layout="wide")
 
 st.title("📊 Clinical Trial Data Engineering Pipeline")
-st.write("This interactive module showcases advanced data cleaning, parsing logic, and reporting built using the SAS 9.4 data stack.")
-
+st.write("SAS code samples")
+/*
 # Define the production SAS macro script string
 sas_pipeline_code = """/* =====================================================================
    STEP 1: GENERATE MOCK BASELINE DATA
@@ -110,3 +110,4 @@ with tab2:
         st.markdown("**Metric Analysis Highlights:**")
         st.metric(label="Average Sample Cohort BMI", value="23.6 kg/m²", delta="-1.2 (Normal Range)")
         st.caption("Baseline metrics categorized using CDC standardization layers.")
+       */
