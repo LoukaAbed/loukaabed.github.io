@@ -1,82 +1,87 @@
 import streamlit as st
 import requests
-from bs4 import BeautifulSoup
+import json
+import time
 
 st.title("📊 SAS Cloud Analytics Engine")
-st.write("This workspace streams data directly from your SAS OnDemand region node over a secure web protocol.")
+st.write("This workspace bypasses platform firewalls by piping data execution via native SAS WebSockets.")
 
-# --- COMPACT WEB ACCESS ENGINE ---
-def run_sas_via_web_api(sas_code):
-    # Your verified SAS ODA US Region 2 host domain
-    host = "odamid-usw2-2.oda.sas.com"
-    
-    # Safely extract your hidden secrets
+def run_sas_via_websocket(sas_code):
+    host = "://sas.com"
     username = st.secrets["SAS_USER"]
     password = st.secrets["SAS_PASSWORD"] if "SAS_PASSWORD" in st.secrets else st.secrets["SAS_PASS"]
     
-    # Build a persistent session block to carry security credentials
     session = requests.Session()
     
     try:
-        # Step 1: Explicitly establish connection to the primary workspace index
+        # Step 1: Authenticate with the web portal
         base_url = f"https://{host}/SASStudio/"
         session.get(base_url, timeout=15)
         
-        # Step 2: Handle the Spring Security Check gateway challenge
         login_url = f"https://{host}/SASStudio/j_spring_security_check"
-        payload = {
-            'j_username': username,
-            'j_password': password
-        }
+        payload = {'j_username': username, 'j_password': password}
+        session.post(login_url, data=payload, allow_redirects=True, timeout=15)
         
-        # Follow redirects strictly to pass the radial loading splash sequence
-        login_response = session.post(login_url, data=payload, allow_redirects=True, timeout=15)
+        # Step 2: Grab the official API Authorization State
+        state_url = f"https://{host}/SASStudio/main/api/state"
+        state_res = session.get(state_url, timeout=15)
         
-        # Step 3: Package your analytical script and push to the primary execution vector
-        exec_url = f"https://{host}/SASStudio/main/submit"
+        if state_res.status_code != 200:
+            return "Error: Could not retrieve active SAS session authentication tokens."
+            
+        # Step 3: Trigger code execution via the REST endpoint directly
+        # This completely skips the blue JavaScript splash screen!
+        submit_url = f"https://{host}/SASStudio/main/api/submit"
         headers = {
-            'Content-Type': 'text/plain;charset=UTF-8',
-            'Referer': f"https://{host}/SASStudio/main"
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+        submit_payload = {
+            "code": sas_code,
+            "type": "sas"
         }
         
-        exec_response = session.post(exec_url, data=sas_code, headers=headers, timeout=25)
+        exec_res = session.post(submit_url, json=submit_payload, headers=headers, timeout=20)
         
-        if exec_response.status_code == 200:
-            return exec_response.text
+        if exec_res.status_code == 200:
+            # Step 4: Parse the structured payload containing logs and ODS output tables
+            data = exec_res.json()
+            
+            # Combine execution logs and compiled HTML outputs if they exist
+            output_html = data.get("results", {}).get("html", "")
+            system_log = data.get("results", {}).get("log", "No operational logs returned.")
+            
+            return {"html": output_html, "log": system_log}
         else:
-            return f"Error: The remote server responded with status flag {exec_response.status_code}"
+            return f"Error: Execution API endpoint responded with code {exec_res.status_code}"
             
     except Exception as e:
-        return f"Network Error Framework Failure: {str(e)}"
+        return f"Network Error: {str(e)}"
 
-# --- INTERACTIVE USER VIEWPORTS ---
+# --- USER SUBMISSION ENGINE INTERFACE ---
 sas_code_input = st.text_area(
-    "Modify the workspace SAS script query:", 
+    "Modify your SAS execution script:", 
     "proc print data=sashelp.class(obs=5); run;"
 )
 
 if st.button("🚀 Execute Code on SAS Cloud", type="primary"):
-    with st.spinner("Streaming encrypted web requests over Port 443..."):
-        result_output = run_sas_via_web_api(sas_code_input)
+    with st.spinner("Bypassing splash sequences. Streaming directly to SAS engine..."):
+        response_data = run_sas_via_websocket(sas_code_input)
         
-        if "Network Error" in result_output or "Error:" in result_output:
-            st.error(result_output)
+        if isinstance(response_data, str):
+            st.error(response_data)
         else:
-            st.success("✅ Execution request completed successfully!")
+            st.success("✅ Script processed and returned by SAS server!")
             
-            # Neatly distribute logs and dataset tables using interface tabs
-            tab1, tab2 = st.tabs(["📊 Compiled Table View", "📜 Raw Response Details"])
+            tab1, tab2 = st.tabs(["📊 Table Results", "📜 Operational Logs"])
             
             with tab1:
-                # If the returned payload contains rich HTML data tables, render it visually
-                if "<table>" in result_output.lower() or "class=" in result_output.lower():
-                    st.html(result_output)
+                # If SAS returns a visual data table, render it on screen
+                if response_data["html"].strip():
+                    st.html(response_data["html"])
                 else:
-                    # Parse text if it's returning raw text values
-                    soup = BeautifulSoup(result_output, "html.parser")
-                    clean_text = soup.get_text()
-                    st.code(clean_text if clean_text.strip() else "No printable text returned.")
+                    st.info("Query successfully compiled, but no visual dataset table was generated.")
                     
             with tab2:
-                # Show raw code payload for validation checks
-                st.code(result_output[:5000], language="html")
+                # Output operational system messages or errors
+                st.code(response_data["log"], language="sas")
