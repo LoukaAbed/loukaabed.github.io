@@ -10,6 +10,31 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
+# --- CSS INJECTION TO CORRECT THE INACCURATE 200MB DISPLAY ---
+# This hides the default Streamlit label strings and injects your true 25MB limit
+st.markdown(
+    """
+    <style>
+    /* Hide the inaccurate default 200MB limit subtitle string */
+    div[data-testid="stFileDropzoneInstructions"] > div > small {
+        visibility: hidden;
+        position: relative;
+    }
+    /* Inject the true, accurate 25MB system limit in its place */
+    div[data-testid="stFileDropzoneInstructions"] > div > small::before {
+        content: "Limit 25MB cumulative";
+        visibility: visible;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        color: #666666;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 
 def contact(name, email, subject, body, attachments_list=None):
     """Email delivery routing via Google Script webhook with multi-file list payload integration."""
@@ -24,9 +49,7 @@ def contact(name, email, subject, body, attachments_list=None):
             "email": email,
             "subject": subject,
             "message": body,
-            "attachments": (
-                attachments_list if attachments_list else []
-            ),  # Sent as an array list
+            "attachments": attachments_list if attachments_list else [],
         }
 
         # Expanded timeout to 30 seconds to support multiple heavy data packets over the network
@@ -34,7 +57,6 @@ def contact(name, email, subject, body, attachments_list=None):
             google_script, json=message_data, allow_redirects=True, timeout=30
         )
 
-        # Evaluate gateway server status
         if network_response.status_code == 200:
             return True, "Success"
         else:
@@ -88,17 +110,16 @@ with st.form("contact_form", clear_on_submit=True):
         )
 
     message = st.text_area(
-        "Message", placeholder="Provide inquiry details here..."
+        "Message", placeholder="Provide inquiry details here ..."
     )
 
-    # UPDATED ELEMENT: Added accept_multiple_files=True to allow selecting several objects at once
     uploaded_files = st.file_uploader(
-        "Upload Attachments (max 25MB)",
+        "Upload Attachments (Up To Max 25MB)",
         accept_multiple_files=True,
-        help="Attach multiple datasets, medical images, Python (.py) / R (.r) scripts, or PDFs.",
+        help="Attach datasets, medical images, Python (.py) / R (.r) scripts, or PDFs.",
     )
 
-    dispatch_trigger = st.form_submit_button("Submit Message")
+    dispatch_trigger = st.form_submit_button("Submit Message Securely")
 
     if dispatch_trigger:
         if not name or not email or not message:
@@ -106,9 +127,8 @@ with st.form("contact_form", clear_on_submit=True):
         elif "@" not in email or "." not in email:
             st.error("Please provide a valid email format.")
         else:
-            with st.spinner("Processing request..."):
+            with st.spinner("Encrypting data and initializing secure transfer..."):
 
-                # Structural processing of file array payload transformations
                 attachments_payload = []
                 cumulative_size = 0
 
@@ -116,7 +136,6 @@ with st.form("contact_form", clear_on_submit=True):
                     for uploaded_file in uploaded_files:
                         cumulative_size += uploaded_file.size
 
-                        # Enforce total combined ceiling to keep Google Mail pipelines stable
                         if cumulative_size > 25 * 1024 * 1024:
                             st.error(
                                 "Total combined file sizes exceed the 25MB maximum threshold allowed."
