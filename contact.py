@@ -10,25 +10,27 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# --- CSS INJECTION TO CORRECT THE INACCURATE 200MB DISPLAY ---
-# This hides the default Streamlit label strings and injects your true 25MB limit
+# --- CSS INJECTION TO CORRECT THE INACCURATE 200MB DISPLAY  on streamlit attachment button---
 st.markdown(
     """
     <style>
-    /* Hide the inaccurate default 200MB limit subtitle string */
-    div[data-testid="stFileDropzoneInstructions"] > div > small {
-        visibility: hidden;
-        position: relative;
+    /* 1. Target the correct updated dropzone text container wrapper to remove 200MB label */
+    div[data-testid="stFileUploaderDropzoneInstructions"] > div > small {
+        display: none !important;
     }
-    /* Inject the true, accurate 25MB system limit in its place */
-    div[data-testid="stFileDropzoneInstructions"] > div > small::before {
+    
+    /* 2. Target the secondary structural fallback label wrappers if present */
+    div[data-testid="stFileUploaderDropzoneInstructions"] > div > span {
+        display: none !important;
+    }
+    
+    /* 3. Inject your exact, accurate system limit smoothly in its place */
+    div[data-testid="stFileUploaderDropzoneInstructions"] > div::after {
         content: "Limit 25MB cumulative";
-        visibility: visible;
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
+        display: block;
+        font-size: 0.8rem;
         color: #666666;
+        margin-top: 4px;
     }
     </style>
     """,
@@ -88,7 +90,7 @@ st.divider()
 # --- CONTACT FORM SECTION ---
 st.markdown("### 📬 Contact & Inquiries")
 st.markdown(
-    "For professional inquiries, please submit a message below or contact me directly via [contact@loukaabed.com](mailto:contact@loukaabed.com)."
+    "For professional inquiries, please submit a message below or email directly at [contact@loukaabed.com](mailto:contact@loukaabed.com)."
 )
 
 # Establish atomic transactional form loop logic
@@ -110,13 +112,13 @@ with st.form("contact_form", clear_on_submit=True):
         )
 
     message = st.text_area(
-        "Message", placeholder="Provide inquiry details here ..."
+        "Message", placeholder="Provide inquiry details here..."
     )
 
     uploaded_files = st.file_uploader(
-        "Upload Attachments (Up To Max 25MB)",
+        "Upload Attachments (Any File Type - Max Total 25MB)",
         accept_multiple_files=True,
-        help="Attach datasets, medical images, Python (.py) / R (.r) scripts, or PDFs.",
+        help="Attach datasets, medical images, Python (.py) / R (.r) scripts, PDFs, text, docx.",
     )
 
     dispatch_trigger = st.form_submit_button("Submit Message Securely")
@@ -127,6 +129,7 @@ with st.form("contact_form", clear_on_submit=True):
         elif "@" not in email or "." not in email:
             st.error("Please provide a valid email format.")
         else:
+            # Informative spinner text aligned with security and clinical architecture
             with st.spinner("Encrypting data and initializing secure transfer..."):
 
                 attachments_payload = []
@@ -138,7 +141,7 @@ with st.form("contact_form", clear_on_submit=True):
 
                         if cumulative_size > 25 * 1024 * 1024:
                             st.error(
-                                "Total combined file sizes exceed the 25MB maximum threshold allowed."
+                                "Total combined file sizes exceeded. 25MB is maximum allowed."
                             )
                             st.stop()
 
