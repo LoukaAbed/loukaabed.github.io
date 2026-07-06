@@ -11,8 +11,8 @@ st.set_page_config(
 )
 
 
-def contact(name, email, subject, body, attachment_data=None):
-    """Email delivery routing via Google Script webhook with universal attachment payload integration."""
+def contact(name, email, subject, body, attachments_list=None):
+    """Email delivery routing via Google Script webhook with multi-file list payload integration."""
     try:
         google_script = os.environ.get("GOOGLE_SCRIPT_URL")
 
@@ -24,15 +24,12 @@ def contact(name, email, subject, body, attachment_data=None):
             "email": email,
             "subject": subject,
             "message": body,
+            "attachments": (
+                attachments_list if attachments_list else []
+            ),  # Sent as an array list
         }
 
-        # Inject Base64 file packet into JSON payload if a file was uploaded
-        if attachment_data:
-            message_data["attachment"] = attachment_data["bytes"]
-            message_data["filename"] = attachment_data["filename"]
-            message_data["mime_type"] = attachment_data["mime_type"]
-
-        # Expanded timeout to 30 seconds to support heavy 25MB data packets over the network
+        # Expanded timeout to 30 seconds to support multiple heavy data packets over the network
         network_response = requests.post(
             google_script, json=message_data, allow_redirects=True, timeout=30
         )
@@ -57,7 +54,6 @@ def contact(name, email, subject, body, attachment_data=None):
 st.title("Louka Abed")
 st.subheader("Clinical Data Scientist | AI Translational Medicine & Pharma R&D")
 
-# Three liner summary block
 st.markdown(
     """International Medical Graduate (MD) combining clinical and biochemistry domain expertise 
 with MS in Data Science and Mathematics foundations to validate, audit, model, and extract AI 
@@ -69,8 +65,6 @@ st.divider()
 
 # --- CONTACT FORM SECTION ---
 st.markdown("### 📬 Contact & Inquiries")
-
-# FIXED: Standardized into a single string literal line to prevent visual word-fusing errors
 st.markdown(
     "For professional inquiries, please submit a message below or contact me directly via [contact@loukaabed.com](mailto:contact@loukaabed.com)."
 )
@@ -97,10 +91,11 @@ with st.form("contact_form", clear_on_submit=True):
         "Message", placeholder="Provide inquiry details here..."
     )
 
-    # NEW COMPONENT: Universal uploader lacking 'type' limits to accept any file natively up to 25MB
-    uploaded_file = st.file_uploader(
-        "Upload Attachment (Any File Type - Max 25MB)",
-        help="Attach datasets, medical images, Python (.py) / R (.r) scripts, or PDFs.",
+    # UPDATED ELEMENT: Added accept_multiple_files=True to allow selecting several objects at once
+    uploaded_files = st.file_uploader(
+        "Upload Attachments (max 25MB)",
+        accept_multiple_files=True,
+        help="Attach multiple datasets, medical images, Python (.py) / R (.r) scripts, or PDFs.",
     )
 
     dispatch_trigger = st.form_submit_button("Submit Message")
@@ -113,30 +108,35 @@ with st.form("contact_form", clear_on_submit=True):
         else:
             with st.spinner("Processing request..."):
 
-                # Structural processing of file data to text string transformations
-                attachment_payload = None
-                if uploaded_file is not None:
-                    # Enforce Google's non-negotiable 25MB infrastructure mail ceiling
-                    if uploaded_file.size > 25 * 1024 * 1024:
-                        st.error(
-                            "File size exceeds the 25MB limit allowed by the mail system."
+                # Structural processing of file array payload transformations
+                attachments_payload = []
+                cumulative_size = 0
+
+                if uploaded_files:
+                    for uploaded_file in uploaded_files:
+                        cumulative_size += uploaded_file.size
+
+                        # Enforce total combined ceiling to keep Google Mail pipelines stable
+                        if cumulative_size > 25 * 1024 * 1024:
+                            st.error(
+                                "Total combined file sizes exceed the 25MB maximum threshold allowed."
+                            )
+                            st.stop()
+
+                        file_bytes = uploaded_file.read()
+                        base64_encoded = base64.b64encode(file_bytes).decode("utf-8")
+                        inferred_mime = uploaded_file.type or "text/plain"
+
+                        attachments_payload.append(
+                            {
+                                "bytes": base64_encoded,
+                                "filename": uploaded_file.name,
+                                "mime_type": inferred_mime,
+                            }
                         )
-                        st.stop()
-
-                    file_bytes = uploaded_file.read()
-                    base64_encoded = base64.b64encode(file_bytes).decode("utf-8")
-
-                    # Handle missing or generic mime-types natively for raw code files (.py/.r)
-                    inferred_mime = uploaded_file.type or "text/plain"
-
-                    attachment_payload = {
-                        "bytes": base64_encoded,
-                        "filename": uploaded_file.name,
-                        "mime_type": inferred_mime,
-                    }
 
                 is_sent, status_log = contact(
-                    name, email, subject, message, attachment_payload
+                    name, email, subject, message, attachments_payload
                 )
                 if is_sent:
                     st.success(
