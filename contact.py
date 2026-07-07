@@ -1,4 +1,5 @@
 import base64
+import mimetypes
 import os
 import requests  # web traffic through google script
 import streamlit as st
@@ -138,8 +139,11 @@ with st.form("contact_form", clear_on_submit=True):
                             st.stop()
 
                         file_bytes = uploaded_file.read()
+                        uploaded_file.seek(0)
                         base64_encoded = base64.b64encode(file_bytes).decode("utf-8")
-                        inferred_mime = uploaded_file.type or "text/plain"
+                        
+                        guessed_type, _ = mimetypes.guess_type(uploaded_file.name)
+                        inferred_mime = guessed_type or "application/octet-stream"
 
                         attachments_payload.append(
                             {
