@@ -3,13 +3,6 @@ import os
 import requests  # web traffic through google script
 import streamlit as st
 
-# Set page configuration
-st.set_page_config(
-    page_title="Louka Abed | Clinical Data Scientist & AI Translational Medicine",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
-
 # --- CORRECT INACCURATE 200MB DISPLAY  on streamlit attachment button---
 st.markdown(
     """
