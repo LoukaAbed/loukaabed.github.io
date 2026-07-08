@@ -20,7 +20,7 @@ else:
             # Executes a lightweight internal check query
             result = conn.execute(sqlalchemy.text("SELECT 1;"))
             
-        st.success("Successfully connected to your Neon Postgres Database!")
+        st.success("Successfully connected to the Database!")
         
     except Exception as e:
         st.error(f"Database Connection Error: {e}")
