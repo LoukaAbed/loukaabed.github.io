@@ -8,23 +8,19 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-      # Maps your GitHub secret into the environment context so the pipeline runner can authenticate
-      NEON_DB_URL: ${{ secrets.NEON_DB_URL }}
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
           lfs: true
 
       - name: Push to Hugging Face Space
-        uses: huggingface/hub-sync@v0.1.0
-        with:
-          github_repo_id: ${{ github.repository }}
-          huggingface_repo_id: loukaabed/portfolio
-          hf_token: ${{ secrets.HF_TOKEN }}
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          # 1. Configure a temporary authenticated remote URL for Hugging Face
+          git remote add hf https://loukaabed:$HF_TOKEN@huggingface.co/spaces/loukaabed/portfolio
+          
+          # 2. Force push the clean main branch to your Hugging Face Space space
+          git push --force hf main
