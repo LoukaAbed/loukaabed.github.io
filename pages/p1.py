@@ -1,5 +1,4 @@
 import os
-import pandas as pd
 import streamlit as st
 import sqlalchemy
 from sqlalchemy import create_engine
@@ -15,7 +14,7 @@ if not db_url:
     st.error("Missing NEON_DB_URL secret in Hugging Face settings.")
 else:
     try:
-        # 2. Establish a connection engine via SQLAlchemy
+        # 2. Establish a connection engine  via SQLAlchemy
         engine = create_engine(db_url)
         
         # 3. check run to make sure it is working
