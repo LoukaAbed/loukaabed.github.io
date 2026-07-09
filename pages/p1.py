@@ -18,13 +18,13 @@ else:
         # 2. Establish a connection engine via SQLAlchemy
         engine = create_engine(db_url)
         
-        # 3. Run a basic check query to ensure everything is working
+        # 3. check run to make sure it is working
         with engine.connect() as conn:
             # Executes a lightweight internal check query
             result = conn.execute(sqlalchemy.text("SELECT 1;"))
             
-        st.success("Successfully connected to the Database!")
+        st.success("Successfully connected to db!")
         
     except Exception as e:
-        st.error(f"Database Connection Error: {e}")
+        st.error(f"db Connection Error: {e}")
 
