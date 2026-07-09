@@ -26,5 +26,5 @@ else:
         
     except Exception as e:
         st.error(f"Database Connection Error: {e}")
-pd.read_sql("select * from tsa", con=conn).head()
+pd.read_sql("select * from tsa", con=create_engine(db_url)).head()
 
