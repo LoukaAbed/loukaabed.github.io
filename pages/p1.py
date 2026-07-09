@@ -5,6 +5,8 @@ from sqlalchemy import create_engine
 
 st.title("📈 Test database")
 
+
+
 # 1. Fetch the secure Neon URL from Hugging Face Secrets
 db_url = os.environ.get("NEON_DB_URL")
 
@@ -24,5 +26,5 @@ else:
         
     except Exception as e:
         st.error(f"Database Connection Error: {e}")
-
+pd.read_sql("select * from tsa", con=conn).head()
 
