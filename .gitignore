@@ -3,3 +3,5 @@ __pycache__/
 #ignore local python cache and environment
 .venv/
 venv/
+#ignore local mac folder
+.DS_Store
