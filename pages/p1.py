@@ -1,6 +1,6 @@
 import os
 import streamlit as st
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 import pandas as pd
 import uuid
 
@@ -54,7 +54,12 @@ if uploaded_csv is not None :
     st.write(result)
 if 'File1Name' in st.session_state:
     file1name=st.session_state["File1Name"]
-    if st.button("Delete {file_nameCSV} Completely from the database"):
-        sql_query = f"DROP TABLE IF EXISTS {file1name}"
-        connection.execute(sql_query)
-        st.write(f"{file_nameCSV} has been deleted from the database.")
+    if st.button(f"Delete {file_nameCSV} Completely from the database"):
+        with bridge.begin() as connection:
+            sql_query = f"DROP TABLE IF EXISTS {file1name}"
+            connection.execute(text(sql_query))
+            del st.session_state["File1Name"]
+            st.session_state['SuccessMessage']=True
+if 'File1Name' not in st.session_state: 
+    if st.session_state.get('SuccessMessage', False):
+        st.success(f"{file_nameCSV} has been completely deleted from the database.")
