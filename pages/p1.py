@@ -15,6 +15,7 @@ url=os.environ.get("NEON_DB_URL")
 
 #establishing bridge to the database
 bridge=create_engine(url)
+connection=bridge.connect()
 
 def safe(file_1):
     if file_1 is not None:
@@ -34,6 +35,7 @@ if uploaded_csv is not None :
     #remove space from name of the file, and storing the full file name with extension and without in two variables
     file_name = uploaded_csv.name.split('.')[0].replace(' ', '_')
     file_nameCSV = file_name + '.csv'
+    file1name=st.session_state["File1Name"]
 
     if uploaded_csv.size > 2*1024*1024:
         st.error(f"[Upload Error] : {file_nameCSV} size exceeded 2MB limit. Please upload a smaller file.")
@@ -42,12 +44,17 @@ if uploaded_csv is not None :
     df.columns= df.columns.str.strip().str.lower().str.replace(' ', '_')
 
     #upload file to the database, replace if exists
-    df.to_sql(name=file_name, con=bridge, if_exists='replace', index=False)
+    df.to_sql(name=file1name, con=bridge, if_exists='replace', index=False)
     st.write(f"your {file_nameCSV} file was uploaded successfully to the database")
 
     #Returning the first five rows of the uploaded
     st.write(f"First five rows of the uploaded {file_nameCSV}")
-    sql_query=f"SELECT * FROM {file_name} LIMIT 5"
+    sql_query=f"SELECT * FROM {file1name} LIMIT 5"
     result = pd.read_sql(sql_query, con=bridge)
     st.write(result)
-    
+if 'File1Name' in st.session_state:
+    file1name=st.session_state["File1Name"]
+    if st.button("Delete {file_nameCSV} Completely from the database"):
+        sql_query = f"DROP TABLE IF EXISTS {file1name}"
+        connection.execute(sql_query)
+        st.write(f"{file_nameCSV} has been deleted from the database.")
