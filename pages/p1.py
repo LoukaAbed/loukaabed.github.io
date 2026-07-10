@@ -21,7 +21,7 @@ def safe(file_1):
     if file_1 is not None:
         if "File1Name" not in st.session_state:
             hex_name = uuid.uuid4().hex
-            st.session_state["File1Name"]=f"User_{hex_name}"
+            st.session_state["File1Name"]=f"user_{hex_name}"
             st.write(hex_name)
             st.write(st.session_state)
 
@@ -49,7 +49,7 @@ if uploaded_csv is not None :
 
     #Returning the first five rows of the uploaded
     st.write(f"First five rows of the uploaded {file_nameCSV}")
-    sql_query=f"SELECT * FROM {file1name} LIMIT 5"
+    sql_query=f"SELECT * FROM {st.session_state['File1Name']} LIMIT 5"
     result = pd.read_sql(sql_query, con=bridge)
     st.write(result)
 if 'File1Name' in st.session_state:
