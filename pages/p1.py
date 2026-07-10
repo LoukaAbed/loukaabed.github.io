@@ -15,7 +15,6 @@ url=os.environ.get("NEON_DB_URL")
 
 #establishing bridge to the database
 bridge=create_engine(url)
-connection=bridge.connect()
 
 def safe(file_1):
     if file_1 is not None:
