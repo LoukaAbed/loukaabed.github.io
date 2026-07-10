@@ -35,7 +35,7 @@ def safe(file_1):
 safe(uploaded_csv)
 
 #Let's check the uploaded file for size and security check and prevent malicious code injection into the database.
-if uploaded_csv is not None and not st.session_state.get('upload_deleted', False):
+if uploaded_csv is not None:
     st.session_state['file_uploaded']=True
     #remove space from name of the file, and storing the full file name with extension and without in two variables
     file_name = uploaded_csv.name.split('.')[0].replace(' ', '_')
