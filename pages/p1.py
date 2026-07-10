@@ -42,14 +42,13 @@ if uploaded_csv is not None :
     df = pd.read_csv(uploaded_csv)
     df.columns= df.columns.str.strip().str.lower().str.replace(' ', '_')
 
-    #upload file to the database, replace if exists
-    df.to_sql(name=file1name, con=bridge, if_exists='replace', index=False)
-    st.write(f"your {file_nameCSV} file was uploaded successfully to the database")
-
-    #Returning the first five rows of the uploaded
     if st.session_state.get('SuccessMessage', False):
         st.stop()   
     else:
+        #upload file to the database, replace if exists
+        df.to_sql(name=file1name, con=bridge, if_exists='replace', index=False)
+        st.write(f"your {file_nameCSV} file was uploaded successfully to the database")
+        #Returning the first five rows of the uploaded
         st.write(f"First five rows of the uploaded file:  {file_nameCSV}")
         sql_query=f"SELECT * FROM {st.session_state['File1Name']} LIMIT 5"
         result = pd.read_sql(sql_query, con=bridge)
