@@ -1,6 +1,6 @@
 #ignore python cache folder
 __pycache__/
-#ignore local python cache and environment
+#ignore local python environment
 .venv/
 venv/
 #ignore local mac folder
