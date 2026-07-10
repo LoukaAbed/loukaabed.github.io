@@ -21,6 +21,7 @@ def safe(file, session_state):
         if internal_name not in session_state:
             hex_name = uuid.uuid4().hex
             session_state[internal_name]=f"User_{hex_name}"
+            st.write(hex_name)
             st.write(session_state)
 
 
