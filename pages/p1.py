@@ -1,6 +1,6 @@
 import os
 import streamlit as st
-import sqlalchemy
+from sqlalchemy import create_engine
 import pandas as pd
 
 #this page made to test the connection to the database
@@ -13,7 +13,7 @@ st.divider()
 url=os.environ.get("NEON_DB_URL")
 
 #establishing bridge to the database
-bridge=sqlalchemy.create_engine(url)
+bridge=create_engine(url)
 
 #let's user upload a csv small 2MB or less file to be stored in the database
 uploaded_csv = st.file_uploader("Upload csv <2MB to be stored in the database", type=["csv"])
