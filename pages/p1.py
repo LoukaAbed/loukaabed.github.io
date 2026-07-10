@@ -15,13 +15,12 @@ url=os.environ.get("NEON_DB_URL")
 
 #establishing bridge to the database
 bridge=create_engine(url)
-connection=bridge.connect()
 
 def safe(file_1):
     if file_1 is not None:
         if "File1Name" not in st.session_state:
             hex_name = uuid.uuid4().hex
-            st.session_state["File1Name"]=f"User_{hex_name}"
+            st.session_state["File1Name"]=f"user_{hex_name}"
             st.write(hex_name)
             st.write(st.session_state)
 
