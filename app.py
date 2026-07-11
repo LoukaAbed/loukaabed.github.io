@@ -8,8 +8,8 @@ st.set_page_config(
 )
 
 # Define page navigation
-contact = st.Page("pages/contact.py", title="Contact", icon="📬")
-p1 = st.Page("pages/p1.py", title="Project 1", icon="📈")
+contact = st.Page("pages/contact.py", title="Contact", icon="📬", url_path='Contact')
+p1 = st.Page("pages/p1.py", title="Project 1", icon="📈", url_path='Project1')
 # Run navigation 
 nav = st.navigation([contact, p1])
 nav.run()
