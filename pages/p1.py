@@ -13,9 +13,9 @@ if uploaded_file is not None:
     if uploaded_file.size > 2 * 1024 * 1024:
         st.error("File size exceeds the maximum limit of 2MB.")
         st.stop()
-    if st.session_state['uploaded_file'] is None:
+    if st.session_state['active_tbl'] is None:
         st.session_state['active_tbl'] = db.store_db(uploaded_file)
-        st.session_state['uploaded_file'] = st.session_state['active_tbl']
+        st.session_state['active_tbl'] = st.session_state['active_tbl']
         st.success(f"Your file {uploaded_file.name.replace(' ', '_')} was uploaded and stored in database as: {tbl_name}")
 if st.session_state['active_tbl'] is not None:
     uploadedfile_preview = f"SELECT * FROM {st.session_state['active_tbl']} LIMIT 5"
