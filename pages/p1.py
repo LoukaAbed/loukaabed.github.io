@@ -2,7 +2,7 @@ import streamlit as st
 import utils.db as db
 import utils.ui as ui
 
-st.title("Database Connection and Management Test")
+st.title("Database Management Test")
 st.divider()
 
 #change default displayed file size from 200MB to 2MB
