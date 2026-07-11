@@ -9,8 +9,8 @@ if 'active_tbl' not in st.session_state:
     st.session_state['active_tbl'] = None
 if 'version' not in st.session_state:
     st.session_state['version']=0
-
-uploaded_file = st.file_uploader("Upload a CSV file: Max Size 2MB", type=["csv"])
+uploader_key=f"upload_{st.session_state['version']}"
+uploaded_file = st.file_uploader("Upload a CSV file: Max Size 2MB", type=["csv"], key=uploader_key)
 st.write('Active Table ', st.session_state['active_tbl'])
 if uploaded_file is not None:
     if uploaded_file.size > 2 * 1024 * 1024:
