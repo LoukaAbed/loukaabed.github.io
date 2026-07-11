@@ -3,8 +3,8 @@ import os
 import uuid
 from sqlalchemy import create_engine, text
 
-#build connection to the database
-bridge = create_engine(os.environ.get("NEON_DB_URL"), echo=True)
+#build connection to the database options pool_pre_ping, pool_recycle prevent db crash on startup  
+bridge = create_engine(os.environ.get("NEON_DB_URL"), echo=True, pool_pre_ping=True, pool_recycle=300 )
 
 def fetch_db(query, query_dic=None):
     with bridge.connect() as conn:
