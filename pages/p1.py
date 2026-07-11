@@ -23,7 +23,6 @@ if st.session_state['active_tbl'] is not None:
     if st.button("Drop Uploaded Table"):
         db.drop_db(st.session_state['active_tbl'])
         st.success(f"Table {st.session_state['active_tbl']} has been dropped from the database.")
-        st.session_state['active_tbl'] = None
         st.rerun()
 
 st.divider()
