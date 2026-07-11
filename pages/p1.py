@@ -20,10 +20,11 @@ if uploaded_file is not None:
 if st.session_state['active_tbl'] is not None:
     uploadedfile_preview = f"SELECT * FROM {st.session_state['active_tbl']} LIMIT 5"
     st.write(db.fetch_db(uploadedfile_preview))
-    if st.button("Drop Uploaded Table"):
-        db.drop_db(st.session_state['active_tbl'])
-        st.success(f"Table {st.session_state['active_tbl']} has been dropped from the database.")
-        st.rerun()
+if st.button("Drop Uploaded Table"):
+    db.drop_db(st.session_state['active_tbl'])
+    st.success(f"Table {st.session_state['active_tbl']} has been dropped from the database.")
+    st.session_state['active_tbl'] = None
+    st.rerun()
 
 st.divider()
 min_age, max_age = st.slider("Age", 0.0, 100.0, value=(0.0, 100.0), key="age")
