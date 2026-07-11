@@ -16,14 +16,14 @@ def edit_db(query, query_dic=None):
         result = conn.execute(text(query), query_dic)
         return pd.DataFrame(result.mappings())   
 
-def name_db():
-    return 'user_' + uuid.uuid4().hex
+def name_db(prefix):
+    return prefix + uuid.uuid4().hex
 
-def store_db(uploaded_file):
+def store_db(uploaded_file, prefix='user_', if_tbl_exist: Literal['append', 'replace', 'fail']='replace', destination_schema='public'):
     df = pd.read_csv(uploaded_file)
-    tbl_name = name_db()
+    tbl_name = name_db(prefix)
     with bridge.begin() as conn:
-        df.to_sql(tbl_name, con=conn, if_exists='replace', index=False)
+        df.to_sql(tbl_name, con=conn, schema=destination_schema, if_exists=if_tbl_exist, index=False)
     return tbl_name
 
 def drop_db(tbl_name):
