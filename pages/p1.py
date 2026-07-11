@@ -16,7 +16,7 @@ if uploaded_file is not None:
     if st.session_state['active_tbl'] is None:
         st.session_state['active_tbl'] = db.store_db(uploaded_file)
         st.session_state['active_tbl'] = st.session_state['active_tbl']
-        st.success(f"Your file {uploaded_file.name.replace(' ', '_')} was uploaded and stored in database as: {tbl_name}")
+        st.success(f"Your file {uploaded_file.name.replace(' ', '_')} was uploaded and stored in database as: {st.session_state['active_tbl']}")
 if st.session_state['active_tbl'] is not None:
     uploadedfile_preview = f"SELECT * FROM {st.session_state['active_tbl']} LIMIT 5"
     st.write(db.fetch_db(uploadedfile_preview))
