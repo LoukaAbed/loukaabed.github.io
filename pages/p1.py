@@ -1,18 +1,8 @@
 import streamlit as st
-import pandas as pd
-import os
-from sqlalchemy import create_engine, text
+import utils.db_utils as db
 
 st.title("Neon Database Connection Test")
 st.divider()
 
-#build connection to the database
-bridge = create_engine(os.environ.get("NEON_DB_URL"), echo=True)
-
-def db_fetch(query, var_dic=None):
-    with bridge.connect() as conn:
-        result = conn.execute(text(query), var_dic)
-        return pd.DataFrame(result.mappings())
-    
 query = "SELECT * FROM bp where gender = :gender and age > :age"
-st.write(db_fetch(query, {"gender": "Male", "age": 25}))
+st.write(db.db_fetch(query, {"gender": "Male", "age": 25}))
