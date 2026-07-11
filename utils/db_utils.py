@@ -25,3 +25,7 @@ def store_db(uploaded_file):
     with bridge.begin() as conn:
         df.to_sql(tbl_name, con=conn, if_exists='replace', index=False)
     return tbl_name
+
+def drop_db(tbl_name):
+    with bridge.begin() as conn:
+        conn.execute(text(f"DROP TABLE IF EXISTS {tbl_name}"))

@@ -2,18 +2,30 @@ from pydoc import text
 import streamlit as st
 import utils.db_utils as db
 
-st.title("Neon Database Connection Test")
+st.title("Database Connection and Management Test")
 st.divider()
+
+if 'uploaded_file' not in st.session_state:
+    st.session_state.uploaded_file = None
 
 uploaded_file = st.file_uploader("Upload a CSV file: Max Size 2MB", type=["csv"])
 if uploaded_file is not None:
     if uploaded_file.size > 2 * 1024 * 1024:
         st.error("File size exceeds the maximum limit of 2MB.")
         st.stop()
-    tbl_name = db.store_db(uploaded_file)
-    st.success(f"Your file {uploaded_file.name.replace(' ', '_')} was uploaded and stored in database as: {tbl_name}")
-    uploadedfile_preview = f"SELECT * FROM {tbl_name} LIMIT 5"
+    if st.session_state['uploaded_file'] is None:
+        tbl_name = db.store_db(uploaded_file)
+        st.session_state['uploaded_file'] = tbl_name
+        st.success(f"Your file {uploaded_file.name.replace(' ', '_')} was uploaded and stored in database as: {tbl_name}")
+if st.session_state['uploaded_file'] is not None:
+    active_tbl=st.session_state['uploaded_file']
+    uploadedfile_preview = f"SELECT * FROM {active_tbl} LIMIT 5"
     st.write(db.fetch_db(uploadedfile_preview))
+    if st.button("Drop Uploaded Table"):
+        db.drop_db(active_tbl)
+        st.session_state['uploaded_file'] = None
+        st.success(f"Table {active_tbl} has been dropped from the database.")
+        st.rerun()
 
 st.divider()
 min_age, max_age = st.slider("Age", 0.0, 100.0, value=(0.0, 100.0), key="age")
