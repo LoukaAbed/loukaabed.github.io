@@ -1,5 +1,5 @@
 import streamlit as st
-import utils.db_utils as db
+import utils.db as db
 
 st.title("Database Connection and Management Test")
 st.divider()
@@ -33,7 +33,7 @@ if st.session_state['active_tbl'] is not None:
     tbl_name = st.session_state['active_tbl']
     uploadedfile_preview = f"SELECT * FROM {tbl_name} LIMIT 5"
     st.write(db.fetch_db(uploadedfile_preview))
-    if st.button("Drop Uploaded Table"):
+    if st.button("Delete Uploaded Table From Our Database"):
         db.drop_db(tbl_name)
         st.session_state['deletion_msg']=True
         st.session_state['deleted_tbl']=tbl_name

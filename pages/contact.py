@@ -3,34 +3,10 @@ import mimetypes
 import os
 import requests  # web traffic through google script
 import streamlit as st
+import utils.ui as ui
 
 # --- CORRECT INACCURATE 200MB DISPLAY  on streamlit attachment button---
-st.markdown(
-    """
-    <style>
-    /* 1. correct container wrapper to remove 200MB label */
-    div[data-testid="stFileUploaderDropzoneInstructions"] > div > small {
-        display: none !important;
-    }
-    
-    /* 2. correct fallback label wrappers if present */
-    div[data-testid="stFileUploaderDropzoneInstructions"] > div > span {
-        display: none !important;
-    }
-    
-    /* 3. Showing Accurate File Uploader total Size */
-    div[data-testid="stFileUploaderDropzoneInstructions"] > div::after {
-        content: "Limit Max Upload Size 25MB";
-        display: block;
-        font-size: 0.8rem;
-        color: #666666;
-        margin-top: 4px;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
+ui.maxfile_size(25)
 
 def contact(name, email, subject, body, attachments_list=None):
     """Email delivery routing via Google Script webhook with multi-file list payload integration."""
