@@ -5,9 +5,10 @@ import utils.db_utils as db
 st.title("Database Connection and Management Test")
 st.divider()
 
-if 'uploaded_file' not in st.session_state:
+if 'active_tbl' not in st.session_state:
     st.session_state['active_tbl'] = None
-    st.session_state['deleted_file']=False
+if 'version' not in st.session_state:
+    st.session_state['version']=0
 
 uploaded_file = st.file_uploader("Upload a CSV file: Max Size 2MB", type=["csv"])
 st.write('Active Table ', st.session_state['active_tbl'])
@@ -16,18 +17,19 @@ if uploaded_file is not None:
         st.error("File size exceeds the maximum limit of 2MB.")
         st.stop()
     if st.session_state['active_tbl'] is None:
-        st.session_state['active_tbl'] = db.store_db(uploaded_file)
-        st.success(f"Your file {uploaded_file.name.replace(' ', '_')} was uploaded and stored in database as: {st.session_state['active_tbl']}")
+        tbl_name = db.store_db(uploaded_file)
+        st.session_state['active_tbl']=tbl_name
+        st.success(f"Your file {uploaded_file.name.replace(' ', '_')} was uploaded and stored in database as: {tbl_name}")
 if st.session_state['active_tbl'] is not None:
-    uploadedfile_preview = f"SELECT * FROM {st.session_state['active_tbl']} LIMIT 5"
+    tbl_name = st.session_state['active_tbl']
+    uploadedfile_preview = f"SELECT * FROM {tbl_name} LIMIT 5"
     st.write(db.fetch_db(uploadedfile_preview))
-if st.button("Drop Uploaded Table"):
-    db.drop_db(st.session_state['active_tbl'])
-    st.success(f"Table {st.session_state['active_tbl']} has been dropped from the database.")
-    st.session_state['active_tbl'] = None
-    st.session_state['deleted_file']=True
-    uploaded_file=None
-    st.rerun()
+    if st.button("Drop Uploaded Table"):
+        db.drop_db(tbl_name)
+        st.success(f"Table {st.session_state['active_tbl']} has been dropped from the database.")
+        st.session_state['active_tbl'] = None
+        st.session_state['version'] +=1
+        st.rerun()
 
 st.divider()
 min_age, max_age = st.slider("Age", 0.0, 100.0, value=(0.0, 100.0), key="age")
