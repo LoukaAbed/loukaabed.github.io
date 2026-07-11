@@ -10,7 +10,7 @@ def fetch_db(query, query_dic=None):
         result = conn.execute(text(query), query_dic)
         return pd.DataFrame(result.mappings())
 
- def edit_db(query, query_dic=None):
+def edit_db(query, query_dic=None):
     with bridge.begin() as conn:
         result = conn.execute(text(query), query_dic)
         return pd.DataFrame(result.mappings())   
