@@ -14,10 +14,6 @@ if uploaded_file is not None:
     st.success(f"Your file {uploaded_file.name} was uploaded and stored in database as: {tbl_name}")
     uploadedfile_preview = f"SELECT * FROM {tbl_name} LIMIT 5"
     st.write(db.fetch_db(uploadedfile_preview))
-    
-
-query = "SELECT * FROM bp where gender = :gender and age > :age"
-st.write(db.fetch_db(query, {"gender": "Male", "age": 25}))
 
 st.divider()
 min_age, max_age = st.slider("Age", 0.0, 100.0, value=(0.0, 100.0), key="age")
