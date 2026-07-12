@@ -21,7 +21,7 @@ with st.form(key='delete_selector', border=False):
     with col1:
         selector=st.selectbox("Choose schema to delete", db.inside_db(need='schema'))
 
-if bttn and selector: 
+if bttn: 
     st.success(f'Schema: {db.schema_db(schma=selector, need='delete_schema')} was successfuly deleted')
     st.rerun()
 
