@@ -27,4 +27,6 @@ if bttn and selector:
     st.rerun()
 
 dataset = st.file_uploader("Upload multiple files dataset:", type=None, accept_multiple_files=True, key="dataset_upload")
-db.dataset_db(dataset, schema='mimic4demo')
+if dataset: 
+    x=db.dataset_db(dataset, schema='mimic4demo')
+    print(x)
