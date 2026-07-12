@@ -32,7 +32,7 @@ def name_db(prefix='user_', tbl_name='uuid'):
         return prefix + uuid.uuid4().hex
 
 
-def store_db(uploaded_file, prefix='user_', tbl_name='uuid', if_tbl_exist: Literal['append', 'replace', 'fail']='replace', destination_schema='public'):
+def store_db(uploaded_file, prefix='', tbl_name='uuid', if_tbl_exist: Literal['append', 'replace', 'fail']='replace', destination_schema='public'):
     df = pd.read_csv(uploaded_file)
     safe_tbl_name = name_db(prefix, tbl_name)
     with bridge.begin() as conn:
