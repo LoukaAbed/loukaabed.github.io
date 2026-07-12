@@ -5,8 +5,8 @@ base = "dark"
 # color for buttons, active items, and headers
 primaryColor = "#00B4D8"
 
-# background color
-backgroundColor = "#0B0F19"
+# background color #0B0F19  #0F172A
+backgroundColor = "#0F172A"
 
 # Dark  for interactive widgets, file upload, and input 
 secondaryBackgroundColor = "#1E2640"
