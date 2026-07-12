@@ -18,7 +18,7 @@ st.write(db.fetch_db(query_age, {"gender": gender, "min_age": min_age, "max_age"
 
 st.divider()
 
-st.subheader("Upload user file into database, retrieve and clean database. Will apply data science tools in future iteration ")
+st.subheader("User upload file into database, read data, then delete. Will apply data science tools in future iteration. try it!")
 
 
 if 'active_tbl' not in st.session_state:
