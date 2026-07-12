@@ -15,14 +15,13 @@ if st.button('Create New Schema'):
         st.warning("The input field is empty. Please enter text.")
 
 col1, col2 = st.columns([1, 2], vertical_alignment="center")
-with col1:
-    bttn = st.button("Delete Schema")
-with col2:
-    selector= selected_option = st.selectbox("Choose schema to delete", db.inside_db(need='schema'))
+with st.form(key='delete_selector', border=False)
+    with col2:
+        bttn = st.form_submit_button("Delete Schema")
+    with col1:
+        selector=st.selectbox("Choose schema to delete", db.inside_db(need='schema'))
 
-if bttn: 
-    if selector:
-        st.success(f'Schema: {db.schema_db(schma=selector, need='delete_schema')} was successfuly deleted')
-        st.rerun()
-    else:
-        st.warning("Choose schema from dropdown menu then click delete")
+if bttn and selector: 
+    st.success(f'Schema: {db.schema_db(schma=selector, need='delete_schema')} was successfuly deleted')
+    st.rerun()
+
