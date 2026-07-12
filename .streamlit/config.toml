@@ -2,21 +2,21 @@
 # base template ("light" or "dark")
 base = "dark"
 
-# color for buttons, active items, and headers
+# color for buttons, active items, and headers 
 primaryColor = "#00B4D8"
 
 # background color #0B0F19  #0F172A
 backgroundColor = "#0F172A"
 
 # Dark  for interactive widgets, file upload, and input 
-secondaryBackgroundColor = "#1E2640"
+secondaryBackgroundColor = "#1E293B"
 
 # off-white text
-textColor = "#F4F6F9"
+textColor = "#F8FAFC"
 
 # sans-serif font
 font = "sans serif"
 
 
 [server]
-maxUploadSize = 25
+maxUploadSize = 50
