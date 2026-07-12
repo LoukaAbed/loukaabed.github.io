@@ -18,6 +18,7 @@ def edit_db(query, query_dic=None):
         result = conn.execute(text(query), query_dic)
         return pd.DataFrame(result.mappings())   
 
+
 def name_db(prefix='user_', tbl_name='uuid'):
     tbl=''
     if tbl_name != 'uuid':
