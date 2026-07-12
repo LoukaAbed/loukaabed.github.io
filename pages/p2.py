@@ -15,16 +15,16 @@ if st.button('Create New Schema'):
         st.warning("The input field is empty. Please enter text.")
 
 
-with st.form(key='delete_selector', border=False):
-    col1, col2 = st.columns([1, 2], vertical_alignment="center")
-    with col1:
-        bttn = st.form_submit_button("Delete Schema")
-    with col2:
-        selector=st.selectbox("Choose schema to delete", db.inside_db(need='schema'))
+# with st.form(key='delete_selector', border=False):
+#     col1, col2 = st.columns([1, 2], vertical_alignment="center")
+#     with col1:
+#         bttn = st.form_submit_button("Delete Schema")
+#     with col2:
+#         selector=st.selectbox("Choose schema to delete", db.inside_db(need='schema'))
 
-if bttn and selector: 
-    st.success(f"Schema: {db.schema_db(schma=selector, need='empty_schema')} was successfuly deleted")
-    st.rerun()
+# if bttn and selector: 
+#     st.success(f"Schema: {db.schema_db(schma=selector, need='empty_schema')} was successfuly deleted")
+#     st.rerun()
 
 dataset = st.file_uploader("Upload multiple files dataset:", type=None, accept_multiple_files=True, key="dataset_upload")
 if dataset: 
