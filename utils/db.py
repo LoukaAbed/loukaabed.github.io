@@ -56,13 +56,13 @@ def schema_db(schma='db1', need: Literal['new_schema', 'delete_schema', 'empty_s
     with bridge.begin() as conn:
         if schma in all_schemas and need=='delete_schema':
             conn.execute(DropSchema(schma, if_exists=True, cascade=True))
-            return True
+            return schma
         elif schma in all_schemas and need=='empty_schema':
             x=MetaData(schema=schma) 
             x.reflect(bind=bridge)
             x.drop_all(conn)
-            return True
+            return schma
         elif need=='new_schema':
             conn.execute(CreateSchema(schma, if_not_exists=True))
-            return True
+            return schma
     return False
