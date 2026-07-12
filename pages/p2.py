@@ -16,11 +16,13 @@ if st.button('Create New Schema'):
 
 col1, col2 = st.columns([1, 2], vertical_alignment="center")
 with col1:
-    bttn = st.button('Delete Schema')
+    bttn = st.button("Delete Schema")
 with col2:
     selector= selected_option = st.selectbox("Choose schema to delete", db.inside_db(need='schema'))
 
-if bttn and selector:
-    st.success(f'Schema: {db.schema_db(schma=selector, need='delete_schema')} was successfuly deleted')
-else:
-    st.warning("Choose schema to delete and click delete")
+if bttn: 
+    if selector:
+        st.success(f'Schema: {db.schema_db(schma=selector, need='delete_schema')} was successfuly deleted')
+        st.rerun()
+    else:
+        st.warning("Choose schema from dropdown menu then click delete")
