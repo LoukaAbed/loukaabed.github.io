@@ -30,9 +30,7 @@ if st.session_state['uploaded'] is None:
     with st.form('batch_files_upload', clear_on_submit=False, key='uploaded'):
         dataset = st.file_uploader("Upload multiple files dataset", type=None, accept_multiple_files=True, key='dataset_key')
         st.session_state['uploaded']=dataset
-        upload_button=st.form_submit_button('Upload Dataset')
-        if st.session_state['uploaded']:
-            st.session_state['uploaded']= {}
+        uploaded_button = st.form_submit_button('Upload Dataset')
 
 
 
@@ -43,6 +41,7 @@ if upload_button:
         st.warning('To upload, please add files first to uploader')
     else:
         st.session_state['files_count']=len(dataset)
+        st.session_state['uploaded'] = {}
         #reset upload button
         st.session_state['saved_tables'] = None
         with st.spinner('Uploading your files to public schema, processing...'):
