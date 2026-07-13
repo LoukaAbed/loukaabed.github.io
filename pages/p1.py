@@ -22,8 +22,9 @@ if 'saved_tables' not in st.session_state:
     st.session_state['saved_tables']=None
     st.session_state['files_count']=0
 
+
 #using form to prevent db write from random clicks
-with st.form('batch_files_upload', clear_on_submit=False):
+with st.form('batch_files_upload', clear_on_submit=True):
     dataset = st.file_uploader("Upload multiple files dataset", type=None, accept_multiple_files=True, key='dataset_key')
     upload_button = st.form_submit_button('Upload Dataset')
 
