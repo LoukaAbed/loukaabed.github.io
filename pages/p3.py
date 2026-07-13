@@ -1,7 +1,5 @@
 import streamlit as st
 
-if 'dataset' not in st.session_state: 
-    st.session_state['dataset']=None
 
 with st.form('batch_files_upload', clear_on_submit=False):
     uploaded=st.file_uploader("Upload multiple files dataset", type=None, accept_multiple_files=True, key='dataset')
