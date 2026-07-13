@@ -26,8 +26,8 @@ if 'saved_tables' not in st.session_state:
 #using form to prevent db write from random clicks
 with st.form('batch_files_upload', clear_on_submit=False):
     dataset = st.file_uploader("Upload multiple files dataset", type=None, accept_multiple_files=True, key='dataset_key')
+    upload_button=st.form_submit_button('Upload Dataset')
     if upload_button:
-        st.form_submit_button('Upload Dataset')
         del st.session_state['dataset_key']
 
 
