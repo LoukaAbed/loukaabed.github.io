@@ -21,14 +21,18 @@ st.subheader("User upload file into database, read data, then delete. Will apply
 if 'saved_tables' not in st.session_state:
     st.session_state['saved_tables']=None
     st.session_state['files_count']=0
+if 'uploaded' not in st.session_state:
+    st.session_state['uploaded']={}
 
 
 #using form to prevent db write from random clicks
-with st.form('batch_files_upload', clear_on_submit=False):
-    dataset = st.file_uploader("Upload multiple files dataset", type=None, accept_multiple_files=True, key='dataset_key')
-    upload_button=st.form_submit_button('Upload Dataset')
-    if upload_button:
-        del st.session_state['dataset_key']
+if st.session_state['uploaded'] is None:
+    with st.form('batch_files_upload', clear_on_submit=False, key='uploaded'):
+        dataset = st.file_uploader("Upload multiple files dataset", type=None, accept_multiple_files=True, key='dataset_key')
+        st.session_state['uploaded']=dataset
+        upload_button=st.form_submit_button('Upload Dataset')
+        if upload_button:
+            st.session_state['uploaded']= {}
 
 
 
