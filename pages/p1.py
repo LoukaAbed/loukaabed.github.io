@@ -4,7 +4,7 @@ import utils.ui as ui
 
 st.title("Testing usage of data from a database")
 st.divider()
-ui.maxfile_size(2) #change default displayed file size from 200MB to 2MB
+ui.maxfile_size(50) #change default displayed file size from 200MB to 50MB
 
 st.subheader("Implementing user-driven interactive data filter")
 
