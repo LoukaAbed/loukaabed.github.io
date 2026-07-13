@@ -31,7 +31,7 @@ if st.session_state['uploaded'] is None:
         dataset = st.file_uploader("Upload multiple files dataset", type=None, accept_multiple_files=True, key='dataset_key')
         st.session_state['uploaded']=dataset
         upload_button=st.form_submit_button('Upload Dataset')
-        if upload_button:
+        if st.session_state['uploaded']:
             st.session_state['uploaded']= {}
 
 
