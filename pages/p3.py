@@ -14,7 +14,6 @@ if upload_button:
         st.warning('Please add files to upload first before clicking upload')
     else:
         dataset = st.session_state[f"{st.session_state['counter']}"]
-        st.success(st.session_state[f"Your file: {st.session_state['counter']} was successfuly uploaded"][0].name)
         for file in dataset:
             st.success(f"Your file: {file.name} was successfuly uploaded")
         st.session_state['counter'] +=1
