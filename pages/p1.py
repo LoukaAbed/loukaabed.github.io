@@ -30,7 +30,7 @@ if st.session_state['uploaded'] is None:
     with st.form('batch_files_upload', clear_on_submit=False, key='uploaded'):
         dataset = st.file_uploader("Upload multiple files dataset", type=None, accept_multiple_files=True, key='dataset_key')
         st.session_state['uploaded']=dataset
-        uploaded_button = st.form_submit_button('Upload Dataset')
+        upload_button = st.form_submit_button('Upload Dataset')
 
 
 
