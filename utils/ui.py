@@ -1,7 +1,7 @@
 import streamlit as st
 
 def upload(session_state):
-    if 'counter' not in st.session_state:
+    if 'counter' not in session_state:
         st.session_state['counter']=0
 
     with st.form('batch_files_upload', clear_on_submit=True):
