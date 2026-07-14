@@ -21,6 +21,7 @@ st.title('Testing Streamlit and code implementation')
 
 dataset = ui.upload()
 files=[]
-for file in dataset:
-    files.append(file.name)
-st.write(files)
+if dataset is not None:
+    for file in dataset:
+        files.append(file.name)
+        st.write(files)
