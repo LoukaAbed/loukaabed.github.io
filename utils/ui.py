@@ -6,7 +6,7 @@ def upload():
         upload_button = st.form_submit_button('Submit For Dataset Upload')
 
     if upload_button:
-        if uploaded:
+        if uploaded is not None:
             dataset=st.session_state['upload']
             return dataset
             for file in dataset:
