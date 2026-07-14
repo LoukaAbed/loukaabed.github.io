@@ -1,16 +1,13 @@
 import streamlit as st
 
 def upload():
-    if 'counter' not in st.session_state:
-        st.session_state['counter']=0
-
     with st.form('batch_files_upload', clear_on_submit=True):
-        uploaded=st.file_uploader("Upload multiple files dataset", type=None, accept_multiple_files=True, key=f"upload_{st.session_state['counter']}")
-        upload_button = st.form_submit_button('Upload Dataset')
+        uploaded=st.file_uploader("Upload multiple files dataset", type=None, accept_multiple_files=True, key='upload')
+        upload_button = st.form_submit_button('Submit For Dataset Upload')
 
     if upload_button:
         if uploaded:
-            dataset=st.session_state[f"upload_{st.session_state['counter']}"]
+            dataset=st.session_state['upload']
             return dataset
             for file in dataset:
                 st.write(f"File: {file.name} was successfully uploaded")
