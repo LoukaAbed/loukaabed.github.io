@@ -1,6 +1,6 @@
 import streamlit as st
 
-def upload(st.session_state):
+def upload():
     if 'counter' not in st.session_state:
         st.session_state['counter']=0
 
