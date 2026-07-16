@@ -9,7 +9,7 @@ ui.maxfile_size(50) #change default displayed file size from 200MB to 50MB
 st.subheader("Implementing user-driven interactive data filter")
 
 min_age, max_age = st.slider("Age", 0.0, 100.0, value=(0.0, 100.0), key="age")
-query_age = "SELECT * FROM bp where gender = :gender and age between :min_age and :max_age"
+query_age = "SELECT * FROM bp_csv where gender = :gender and age between :min_age and :max_age"
 gender = st.radio(label="Gender", options=["Male", "Female"], horizontal=True)
 parameter={"gender": gender, "min_age": min_age, "max_age": max_age}
 st.write(db.fetch_db(query_age, parameter))
