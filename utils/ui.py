@@ -6,6 +6,8 @@ bridge = create_engine(os.environ.get("NEON_DB_URL"), echo=True, pool_pre_ping=T
 
 
 def upload():
+    if 'dataset_dic' not in st.session_state:
+        st.session_state['dataset_dic']={}
     col1, col2 = st.columns(2)
     with col1:
         with st.form('batch_files_upload', clear_on_submit=True):
@@ -17,14 +19,14 @@ def upload():
     if upload_button:
         if uploaded and len(uploaded)>0:
             with st.spinner(f"Uploading files into 'public' schema. Processing..."):
-                dataset=st.session_state['upload']
+                st.session_state['dataset_dic']=st.session_state['upload']
                 dataset_dic={}
-                for file in dataset:
+                for file in st.session_state['dataset_dic']:
                     file_key = db.name_db(file.name, prefix='', name_type='file')
                     dataset_dic[file_key] = file
                     st.write(f"File: {file.name} was successfully uploaded")
-                dataset_dic = db.dataset_db(dataset, schema=selected_schema, prefix='', if_exists='replace')
-                return dataset_dic
+                st.session_state['dataset_dic'] = db.dataset_db(dataset, schema=selected_schema, prefix='', if_exists='replace')
+                return st.session_state['dataset_dic']
         else:
             st.warning('Please upload the files before clicking submit')
 
