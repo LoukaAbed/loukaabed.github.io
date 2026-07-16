@@ -12,9 +12,9 @@ def upload():
     with col1:
         with st.form('batch_files_upload', clear_on_submit=True):
             uploaded=st.file_uploader("Upload multiple files dataset", type=None, accept_multiple_files=True, key='upload')
-            upload_button = st.form_submit_button('Submit For Dataset Upload')
+            upload_button = st.form_submit_button('Submit Dataset For Upload')
         with col2:
-            selected_schema = st.selectbox("Select target schema for upload", inspect(bridge).get_schema_names())
+            selected_schema = st.selectbox("Select Target Schema To Upload Dataset To", inspect(bridge).get_schema_names())
 
     if upload_button:
         if uploaded and len(uploaded)>0:
