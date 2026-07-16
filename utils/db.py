@@ -5,9 +5,10 @@ from sqlalchemy import create_engine, inspect, MetaData, text
 from sqlalchemy.schema import CreateSchema, DropSchema
 from typing import Literal
 import re
+import streamlit as st
 
 #build connection to the database options pool_pre_ping, pool_recycle prevent db crash on startup  
-bridge = create_engine(os.environ.get("NEON_DB_URL"), echo=True, pool_pre_ping=True, pool_recycle=300 )
+bridge = bridge_db()
 
 def fetch_db(query, query_dic=None):
     with bridge.connect() as conn:
@@ -88,3 +89,8 @@ def dataset_db(dataset, schema='public', prefix='', if_exists='replace'):
             df.to_sql(name=file_key, con=conn, schema=schema, if_exists=if_exists, index=False)
             dataset_dic[file_key] = df
     return dataset_dic
+
+@st.cache_resource
+def bridge_db():
+    return create_engine(os.environ.get("NEON_DB_URL"), echo=True, pool_pre_ping=True, pool_recycle=300 )
+

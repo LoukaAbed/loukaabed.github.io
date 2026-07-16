@@ -2,7 +2,7 @@ import streamlit as st
 import utils.db as db
 import os
 from sqlalchemy import create_engine, inspect, MetaData, text
-bridge = create_engine(os.environ.get("NEON_DB_URL"), echo=True, pool_pre_ping=True, pool_recycle=300 )
+bridge=db.bridge_db()
 
 
 def upload():
