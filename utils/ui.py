@@ -1,18 +1,29 @@
 import streamlit as st
+import utils.db as db
+from sqlalchemy import create_engine, inspect, MetaData, text
+bridge = create_engine(os.environ.get("NEON_DB_URL"), echo=True, pool_pre_ping=True, pool_recycle=300 )
+
 
 def upload():
-    with st.form('batch_files_upload', clear_on_submit=True):
-        uploaded=st.file_uploader("Upload multiple files dataset", type=None, accept_multiple_files=True, key='upload')
-        upload_button = st.form_submit_button('Submit For Dataset Upload')
+    col1, col2 = st.columns(2)
+    with col1:
+        with st.form('batch_files_upload', clear_on_submit=True):
+            uploaded=st.file_uploader("Upload multiple files dataset", type=None, accept_multiple_files=True, key='upload')
+            upload_button = st.form_submit_button('Submit For Dataset Upload')
+        with col2:
+            selected_schema = st.selectbox("Select target schema for upload", inspect(bridge).get_schema_names())
 
     if upload_button:
         if uploaded:
-            dataset=st.session_state['upload']
-            for file in dataset:
-                st.write(f"File: {file.name} was successfully uploaded")
-            return dataset
+            with st.spinner(f"Uploading files into 'public' schema. Processing..."):
+                dataset=st.session_state['upload']
+                for file in dataset:
+                    st.write(f"File: {file.name} was successfully uploaded")
+                dataset_dic = db.dataset_db(dataset, schema=selected_schema, prefix='', if_exists='replace')
+                return dataset_dic
         else:
             st.warning('Please upload the files before clicking submit')
+
 
 
 
