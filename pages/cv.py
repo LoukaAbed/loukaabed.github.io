@@ -13,13 +13,21 @@ that integrates complex healthcare data streams, high-throughput genomic and pro
 st.write("**Employment Status:** US Citizen | Fully authorized for US employment with no sponsorship required.")
 
 st.divider()
+st.markdown("### Education")
+st.markdown("**MS in Data Science** | Eastern University | Expected Graduation: May 2027 (In Progress)")
+st.write("""* **Completed Coursework:** Principles of Python Programming, Data and Database Management with SQL.""")
+
+st.markdown("**Cairo University Faculty of Medicine, Cairo, Egypt**")
+st.write("* Bachelor of Medicine, Bachelor of Surgery (M.B. B.Ch.) — *Equivalent to MD degree in the United States. Certified General Medical Practitioner.*")
+st.write("* Clinical Clerkship at Columbia University College of Physicians and Surgeons, New York. Routinely used Electronic Health Record (EHR). Passed US Medical Licensing Exam step 1 (USMLE step 1).")
+
+st.markdown("**University of Massachusetts (UMass), Boston**")
+st.write("* Bachelor of Science in Biochemistry & Mathematics Minor — *Summa Cum Laude graduate with Honors in Biochemistry, top of my class, GPA 3.86/4.00.*")
 
 st.markdown("### Data Science Specialization & Technical Skills")
 st.write("""
 * **Core Programming:** Python, R, SQL.
 * **Quantitative Coursework:** Calculus, linear algebra, differential equations, mathematical biology, probability & Statistics.
-* **Current Degree Track:** **MS in Data Science** | Eastern University | Expected Graduation: May 2027 (In Progress)
-  * *Completed Foundations:* Principles of Python Programming, Data and Database Management with SQL.
 """)
 
 st.divider()
@@ -47,7 +55,7 @@ st.write("""
 
 st.divider()
 
-st.markdown("### 🩺 Clinical Operations & Medical Registries")
+st.markdown("### Clinical Operations & Medical Registries")
 
 st.markdown("**Family Medicine Resident Physician** | Ministry of Health | Port Said, Egypt | 03/2021 – 02/2023")
 st.write("""
@@ -61,7 +69,7 @@ st.write("""
 
 st.divider()
 
-st.markdown("### 🔬 Laboratory Research Foundations")
+st.markdown("### Laboratory Research Foundations")
 
 st.markdown("**Research Associate (Summer)** | Columbia University Medical Center, Nephrology Division | NY")
 st.write("* Role of Copy-Number Variations (CNVs) in children. Used Real-Time qPCR (qRT-PCR) to validate & quantify rare CNVs. Used online data resources extensively: **UCSC genome browser, dbSNP**, Primer3, primer design.")
@@ -76,15 +84,6 @@ st.markdown("**Research Assistant (Work-study)** | University of Massachusetts, 
 st.write("* Cell signaling study in-vivo Drosophila using RNAi vectors. DNA cloning/subcloning, restriction enzymes, ligation, competent E. Coli, transformations, agar plating, PCR screening, minipreps, spectrophotometry.")
 
 st.divider()
-
-st.markdown("### Academic Background & Credentials")
-
-st.markdown("**Cairo University Faculty of Medicine, Cairo, Egypt**")
-st.write("* Bachelor of Medicine, Bachelor of Surgery (M.B. B.Ch.) — *Equivalent to MD degree in the United States. Certified General Medical Practitioner.*")
-st.write("* Clinical Clerkship at Columbia University College of Physicians and Surgeons, New York. Routinely used Electronic Health Record (EHR). Passed US Medical Licensing Exam step 1 (USMLE step 1).")
-
-st.markdown("**University of Massachusetts (UMass), Boston**")
-st.write("* Bachelor of Science in Biochemistry & Mathematics Minor — *Summa Cum Laude graduate with Honors in Biochemistry, top of my class, GPA 3.86/4.00.*")
 
 st.markdown("**Accomplishments & Awards:**")
 st.write("• Emil Fischer Book Award, Honors, and Distinction in Biochemistry • Dean's List • Tutor Certificate of Recognition • Classroom Leadership Award • Ronald E. McNair Scholar")
