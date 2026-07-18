@@ -25,7 +25,11 @@ st.subheader("Education", divider="green", anchor=False)
 st.write("**MS in Data Science** | Eastern University")
 st.write("\u00A0" * 4 + "- Coursework:", "Python, SQL")
 
+st.write("**MS in Data Science** | Eastern University")
+st.write("\u00A0" * 6 + "- Coursework:", "Python, SQL")
 
+st.write("**MS in Data Science** | Eastern University")
+st.write("- Coursework:", "Python, SQL")
 
 st.html("<h3 style='margin: 0;'><b>Bachelor of Medicine and Surgery (M.B. B.Ch.)</b></h3>")
 st.html("<h4 style='margin: 2px 0 8px 0; color: gray;'>Cairo University Faculty of Medicine — Equivalent to MD in the US</h4>")
