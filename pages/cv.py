@@ -9,7 +9,7 @@ left, center, right =st.columns(3)
 with left:
     st.write("Malden, MA 02148")
 with center:
-    st.write("Phone: 617-942-1441")
+    st.write("\tPhone: 617-942-1441")
 with right:
     st.write("E-Mail: contact@loukaabed.com")
 st.subheader("Clinical Data Scientist | AI Translational Medicine & Pharma R&D", divider="green", anchor=False)
