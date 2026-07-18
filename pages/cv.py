@@ -1,11 +1,7 @@
-import base64
-import mimetypes
-import os
-import requests  # web traffic through google script
 import streamlit as st
 import utils.ui as ui
 
-right, center, left =columns(3)
+left, center, right =st.columns(3)
 with center:
     st.title("Louka Abed")
 st.subheader("Clinical Data Scientist | AI Translational Medicine & Pharma R&D")
