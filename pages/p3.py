@@ -3,7 +3,7 @@ import utils.ui as ui
 import pandas as pd
 import time
 
-st.title('Testing Streamlit and code implementation')
+st.title('Implementing multifile dataset uploader to a target database schema')
 
 ui.upload()
 dataset=st.session_state['dataset_dic']
