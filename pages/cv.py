@@ -22,12 +22,9 @@ st.info("Employment Status:** US Citizen | Fully authorized for US employment wi
 st.divider()
 
 st.header("Education", divider="green", anchor=False)
-
-st.write("Bachelor of Medicine, Bachelor of Surgery (M.B. B.Ch.)")
-st.write("Cairo University Faculty of Medicine, Cairo, Egypt")
-st.html("<h5><b>Bachelor of Medicine and Surgery (M.B. B.Ch.)</b> — Cairo University Faculty of Medicine</h5>") 
-st.html("<h3><b>Bachelor of Medicine and Surgery (M.B. B.Ch.)</b> — Cairo University Faculty of Medicine</h3>") 
-st.write("Bachelor of Medicine Bachelor of Surgery is equivalent to MD degree in the United States.")
+st.html("<h3><b>Bachelor of Medicine and Surgery (M.B. B.Ch.)</b></h3>") 
+st.html("<h4><b>Cairo University Faculty of Medicine</b>Equivalent to MD in the US</b></h4>")
+st.html("<blockquote><b>Clerkship:</b> Emergency Medicine, ENT, Forensic Medicine</blockquote>")
 
 st.write("Doctor of Medicine")
 st.write("Columbia University College of Physicians and Surgeons, New York")
