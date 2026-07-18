@@ -84,6 +84,7 @@ def send(name, email, subject, body, attached_files=None):
 
 
 def message():
+    maxfile_size(max_size=25)
     # Message Form
     st.markdown("### ✉️ Professional Inquiries")
     st.markdown("Please use the form below for recruitment inquiries or project collaborations. You may also contact me directly via email at [contact@loukaabed.com](mailto:contact@loukaabed.com).")
