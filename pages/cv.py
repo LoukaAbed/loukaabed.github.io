@@ -24,9 +24,8 @@ st.markdown("**Bachelor of Science in Biochemistry & Mathematics Minor, Universi
 st.write("> Summa Cum Laude graduate with Honors in Biochemistry, top of my class, GPA 3.86/4.00")
 
 st.markdown("### Data Science Specialization & Technical Skills")
-st.write("""
-> **Core Programming:** Python, R, SQL.
-> **Mathematics:** Calculus, linear algebra, differential equations, mathematical biology, probability & Statistics.""")
+st.write("> **Core Programming:** Python, R, SQL.")
+st.write("> **Mathematics:** Calculus, linear algebra, differential equations, mathematical biology, probability & Statistics.")
 
 st.divider()
 
