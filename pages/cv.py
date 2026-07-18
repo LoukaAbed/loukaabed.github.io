@@ -14,20 +14,19 @@ st.write("**Employment Status:** US Citizen | Fully authorized for US employment
 
 st.divider()
 st.markdown("### Education")
-st.markdown("**MS in Data Science | Eastern University | Expected Graduation: May 2027 (In Progress)**")
+st.markdown("**MS in Data Science | Eastern University | Expected Graduation: May 2027**")
 st.write("""> -**Coursework:** Principles of Python Programming, Data and Database Management with SQL.""")
 
-st.markdown("**Bachelor of Medicine, Bachelor of Surgery (M.B. B.Ch.) (MD equivalent in the US) | Cairo University Faculty of Medicine **")
-st.write("> **Clinical Clerkship** at Columbia University College of Physicians and Surgeons, New York. Routinely used Electronic Health Record (EHR). Passed US Medical Licensing Exam step 1 (USMLE step 1).")
+st.markdown("**Bachelor of Medicine, Bachelor of Surgery (M.B. B.Ch.) (equivalent to MD in the US) | Cairo University Faculty of Medicine**")
+st.write("> **Clinical Clerkship at Columbia University College of Physicians and Surgeons, New York:** medicine, pediatrics, obstetrics & gynecology, psychiatry, surgery, routinely used Electronic Health Record (EHR). Passed US Medical Licensing Exam step 1 (USMLE step 1).")
 
-st.markdown("**University of Massachusetts (UMass), Boston**")
-st.write("* Bachelor of Science in Biochemistry & Mathematics Minor — *Summa Cum Laude graduate with Honors in Biochemistry, top of my class, GPA 3.86/4.00.*")
+st.markdown("**Bachelor of Science in Biochemistry & Mathematics Minor, University of Massachusetts, Boston**")
+st.write("> Summa Cum Laude graduate with Honors in Biochemistry, top of my class, GPA 3.86/4.00")
 
 st.markdown("### Data Science Specialization & Technical Skills")
 st.write("""
-* **Core Programming:** Python, R, SQL.
-* **Quantitative Coursework:** Calculus, linear algebra, differential equations, mathematical biology, probability & Statistics.
-""")
+> **Core Programming:** Python, R, SQL.
+> **Mathematics:** Calculus, linear algebra, differential equations, mathematical biology, probability & Statistics.""")
 
 st.divider()
 
