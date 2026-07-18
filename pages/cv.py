@@ -23,7 +23,8 @@ st.divider()
 
 st.header("Education", divider="green", anchor=False)
 st.write("MS in Data Science | Eastern University")
-st.html("<p style='margin: 0 0 0 20px;'>- <b>Completed Coursework:</b> Principles of Python Programming...</p>")
+st.write("    - **Coursework:**", "Python, SQL")
+
 
 
 st.html("<h3 style='margin: 0;'><b>Bachelor of Medicine and Surgery (M.B. B.Ch.)</b></h3>")
