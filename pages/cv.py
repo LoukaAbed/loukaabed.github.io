@@ -19,27 +19,21 @@ that integrates complex healthcare data streams, high-throughput genomic and pro
 
 st.info("Employment Status:** US Citizen | Fully authorized for US employment with no sponsorship required.")
 
-st.divider()
-
-st.subheader("Education", divider="green", anchor=False)
-st.write("**MS in Data Science** | Eastern University")
-st.write("""> Coursework: Python, SQL""")
 
 st.subheader("Education", divider="green", anchor=False)
 
-st.write("**MS in Data Science** | Eastern University | In Progress (Expected 2027)")
-st.write("""> Coursework: Principles of Python Programming, Data and Database Management with SQL.""")
+st.write("**MS in Data Science** | Eastern University Expected Graduation May 2027")
+st.write("""> Coursework: Python, SQL.""")
 
 st.write("**Bachelor of Medicine, Bachelor of Surgery (M.B. B.Ch.)** | Cairo University Faculty of Medicine, Cairo, Egypt")
 st.write("""> Bachelor of Medicine Bachelor of Surgery is equivalent to MD degree in the United States.""")
+st.write("""> Clerkship at Columbia University College of Physicians and Surgeons: medicine, pediatrics, obstetrics & gynecology, psychiatry, surgery, routinely used Electronic Health Record (EHR).""")
+st.write("""> Passed US Medical Licensing Exam (USMLE) step 1.""")
 
-st.write("**Doctor of Medicine** | Columbia University College of Physicians and Surgeons, New York")
-st.write("""> Successfully completed clinical clerkships in medicine, pediatrics, obstetrics & gynecology, psychiatry, surgery, routinely used Electronic Health Record (EHR). Passed US Medical Licensing Exam step 1 (USMLE step 1).""")
 
 st.write("**Bachelor of Science in Biochemistry & Mathematics Minor** | University of Massachusetts (UMass), Boston")
 st.write("""> Summa Cum Laude graduate with Honors in Biochemistry, top of my class, GPA 3.86/4.00""")
 
-st.divider()
 
 st.subheader("Work History", divider="green", anchor=False)
 
@@ -64,34 +58,22 @@ st.write("""> Role of Copy-Number Variations (CNVs) in vesicoureteric reflux (VU
 st.write("**Process Development Associate (Contract)** | Broad Institute | Cambridge, MA")
 st.write("""> Sequencing gaps and diﬀicult-to-sequence regions in genomes of diﬀerent microorganisms using Primer Walking. Operating Multiprobe robot for automatic liquid reagents dispensing (High Throughput Technique). Routinely used 96-wells, made labels, barcode plate reader, thermal plate sealer.""")
 
-st.write("**Research Assistant (Summer)** | Beth Israel Deaconess Medical Center - The Division of Matrix Biology | Boston, MA")
-st.write("""> Role of carcinoma-associated fibroblasts in breast cancer: local recruit vs distant BM in-vivo mouse study. Gained skills in tissue genotyping, tumor cell culture (4T1), fibroblasts primary cell culture, paraﬀin embedding & sectioning using microtome, Immunohistochemistry (IHC) & Immunofluorescence (IF) staining, H&E staining.""")
-
-st.write("**Research Assistant (Work-study)** | University of Massachusetts, Department of Biology | Boston, MA")
-st.write("""> Study of cell signaling in-vivo Drosophila, applying post-transcriptional gene silencing using RNAi vector. DNA cloning / subcloning, restriction enzymes digest, ligation, competent E. Coli, heat transformation. Streaking/plating agar, PCR colonies screening, plasmid extraction, miniprep, spectrophotometry.""")
-
-st.divider()
 
 st.subheader("Data Science Skills", divider="green", anchor=False)
-st.write("**Core Technical & Quantitative Competency Toolkit** | Operational Proficiencies")
-st.write("""> Programming in Python, Java, MATLAB, R, Microsoft Excel Macros. Coursework: calculus, linear algebra, differential equations, mathematical biology, probability & Statistics.""")
+st.write("""> Programming: Python, Java, R, SQL.""")
+st.write("""> Mathematic: calculus, linear algebra, differential equations, mathematical biology, probability & Statistics.""")
 
-st.divider()
 
 st.subheader("Accomplishments", divider="green", anchor=False)
-st.write("**Academic Recognitions, Fellowships & Group Distinctions** | Award Matrix")
-st.write("""> Emil Fischer Book Award, Honors, and Distinction in Biochemistry: UMass Boston. Dean List: UMass Boston. Tutor Certificate of Recognition: Academic Support UMass Boston. Classroom Leadership Award: UMass Boston Honors Program. Ronald's McNair Post Baccalaureate Achievement Program Scholar.""")
-
-st.divider()
+st.write("""> Emil Fischer Book Award, Honors in Biochemistry, and Distinction in Biochemistry: UMass Boston""")
+st.write("""> Tutor Certificate of Recognition: Academic Support: UMass Boston.""")
+st.write("""> Ronald's McNair Post Baccalaureate Achievement Program Scholar.""")
 
 st.subheader("Certifications", divider="green", anchor=False)
-st.write("**Professional Licensure & Operational Clinical Credentials** | Status Verification")
-st.write("""> Certified General Medical Practitioner (Physician/MD) — Ministry of Health & Population, Egypt (06/2020). Certified in Immediate Life Support (ILS) / Basic Life Support (BLS) — European Resuscitation Council.""")
-
-st.divider()
+st.write("""> Certified General Medical Practitioner (Physician/MD) — Ministry of Health & Population, Egypt (06/2020).""")
+st.write("""> Certified in Immediate Life Support (ILS) / Basic Life Support (BLS) — European Resuscitation Council.""")
 
 st.subheader("Publications", divider="green", anchor=False)
-st.write("**Peer-Reviewed Research Contribution** | Citation Index")
 st.write("""> Phillip Kyriakakis; Marla Tipping; Louka Abed; Alexey Veraksa. "Tandem affinity purification in Drosophila: The advantages of the GS-TAP system." Fly Vol: 2:229-235.""")
 
 st.divider()
