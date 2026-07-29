@@ -25,16 +25,18 @@ def edit_db(query, query_dic=None):
         return pd.DataFrame(result.mappings())   
 
 
-def name_db(tbl_name, prefix='user_', name_type='uuid'):
+def name_db(tbl_name, prefix='user_', name_type='uuid', ext=False):
     tbl=''
     if name_type == 'file':
         if '.' in tbl_name:
             file_name, extension = tbl_name.rsplit('.', 1)
             extension = extension.lower()
-            tbl= f"{prefix}{re.sub(r'[_]+', '_', re.sub(r'[^a-zA-Z0-9_]', '_', file_name)).lower()}_{extension}"
+            if ext:
+                tbl= f"{prefix}{re.sub(r'[_]+', '_', re.sub(r'[^a-zA-Z0-9_]', '_', file_name)).lower()}_{extension}"
+            else:
+                tbl= f"{prefix}{re.sub(r'[_]+', '_', re.sub(r'[^a-zA-Z0-9_]', '_', file_name)).lower()}"
         else:
             file_name=tbl_name
-            extension=''
             tbl= f"{prefix}{re.sub(r'[_]+', '_', re.sub(r'[^a-zA-Z0-9_]', '_', file_name)).lower()}"
     else:
         tbl= prefix + uuid.uuid4().hex
