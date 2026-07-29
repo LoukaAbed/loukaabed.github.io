@@ -45,7 +45,7 @@ def name_db(tbl_name, prefix='user_', name_type='uuid'):
 
 
 def store_db(uploaded_file, prefix='user_', name_type: Literal['file', 'uuid']='file', if_tbl_exist: Literal['append', 'replace', 'fail']='replace', destination_schema='public'):
-    df = pd.read_csv(uploaded_file)
+    df = pd.read_csv(uploaded_file).rename(columns=str.lower)
     file= uploaded_file.name
     safe_tbl_name = name_db(file, prefix, name_type)
     with bridge.begin() as conn:
@@ -83,9 +83,9 @@ def dataset_db(dataset, schema='public', prefix='', if_exists='replace'):
             df=''
             file_key = name_db(file.name, prefix, name_type='file')
             if file.name.endswith(('.tsv', '.txt', '.dat')):
-                df = pd.read_csv(file, sep=None, engine='python')
+                df = pd.read_csv(file, sep=None, engine='python').rename(columns=str.lower)
             elif file.name.endswith('.csv'):
-                df = pd.read_csv(file)
+                df = pd.read_csv(file).rename(columns=str.lower)
             elif file.name.endswith('.xlsx'):
                 df = pd.read_excel(file)
             if isinstance(df, str):
