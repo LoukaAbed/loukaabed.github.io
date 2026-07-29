@@ -10,7 +10,7 @@ st.subheader("Implementing user-driven interactive data filter")
 
 min_age, max_age = st.slider("Age", 0, 100, value=(0, 100), key="age")
 gender = st.radio(label="Gender", options=["Male", "Female"], horizontal=True)
-query_age = 'SELECT * FROM bp_csv where "gender" = :Gender and "age" between :min_age and :max_age'
+query_age = 'SELECT * FROM bp where "gender" = :Gender and "age" between :min_age and :max_age'
 parameter={"gender": gender, "min_age": min_age, "max_age": max_age}
 st.write(db.fetch_db(query_age, parameter))
 
