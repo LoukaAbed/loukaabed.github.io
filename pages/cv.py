@@ -2,7 +2,13 @@ import streamlit as st
 import utils.ui as ui
 
 st.header("Louka Abed", divider="green", anchor=False)
-st.write("Address: Malden, MA 02148 | Phone: 617-942-1441 | E-Mail: contact@loukaabed.com")
+lt, ctr, rt = st.columns(3)
+with lt:
+    st.write("Address: Malden, MA 02148")
+with ctr:
+    st.write("Phone: 617-942-1441")
+with rt:
+    st.write("E-Mail: contact@loukaabed.com")
 
 st.subheader("Professional Summary", divider="green", anchor=False)
 st.write("""International Medical Graduate (MD) combining clinical and biochemistry domain expertise with MS in Data Science and Mathematics foundations to validate, 
