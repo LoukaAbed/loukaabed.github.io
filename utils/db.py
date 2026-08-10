@@ -11,7 +11,7 @@ import streamlit as st
 def bridge_db():
     return create_engine(os.environ.get("NEON_DB_URL"), echo=True, pool_pre_ping=True, pool_recycle=300 )
 
-#build connection to the database options pool_pre_ping, pool_recycle prevent db crash on startup  
+#build connection to the database options pool_pre_ping, pool_recycle prevent db crash when startup  
 bridge = bridge_db()
 
 def fetch_db(query, query_dic=None):
