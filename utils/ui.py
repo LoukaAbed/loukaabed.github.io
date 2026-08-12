@@ -9,28 +9,37 @@ from sqlalchemy import create_engine, inspect, MetaData, text
 bridge=db.bridge_db()
 
     
+import streamlit as st
+
 def upload():
+    # 1. Initialize a version counter for the file uploader key if it does not exist
+    if 'uploader_version' not in st.session_state:
+        st.session_state['uploader_version'] = 0
     if 'dataset_dic' not in st.session_state:
-        st.session_state['dataset_dic']={}
+        st.session_state['dataset_dic'] = {}
+        
     col1, col2 = st.columns(2)
     with col1:
-        with st.form('batch_files_upload', clear_on_submit=True):
-            uploaded=st.file_uploader("Upload multiple files dataset", type=None, accept_multiple_files=True, key='upload')
+
+        with st.form('batch_files_upload'):
+            uploader_key = f"upload_v_{st.session_state['uploader_version']}"
+            uploaded = st.file_uploader("Upload multiple files dataset", type=None, accept_multiple_files=True, key=uploader_key)
             upload_button = st.form_submit_button('Submit Dataset For Upload')
-        with col2:
-            selected_schema = st.selectbox("Select Target Schema To Upload Dataset To", inspect(bridge).get_schema_names())
+    with col2:
+        selected_schema = st.selectbox("Select Target Schema To Upload Dataset To", inspect(bridge).get_schema_names())
 
     if upload_button:
-        if uploaded and len(uploaded)>0:
-            with st.spinner(f"Uploading files into 'public' schema. Processing..."):
-                dataset=st.session_state['upload']
-                dataset_dic={}
-                for file in st.session_state['dataset_dic']:
-                    file_key = db.name_db(file, prefix='', name_type='file')
-                    dataset_dic[file_key] = file
-                st.session_state['dataset_dic'] = db.dataset_db(dataset, schema=selected_schema, prefix='', if_exists='replace')
+        if uploaded:
+            with st.spinner(f"Uploading files into '{selected_schema}' schema. Processing..."):
+                # 4. Safely process your database upload using the active files
+                st.session_state['dataset_dic'] = db.dataset_db(uploaded, schema=selected_schema, prefix='', if_exists='replace')
+                st.success("Dataset uploaded successfully!")
+                
+                st.session_state['uploader_version'] += 1
+                st.rerun() 
         else:
             st.warning('Please upload the files before clicking submit')
+
 
 
 
