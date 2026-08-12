@@ -5,9 +5,7 @@ from sqlalchemy import create_engine, inspect, MetaData, text
 from sqlalchemy.schema import CreateSchema, DropSchema
 from typing import Literal
 import re
-import streamlit as st
 
-@st.cache_resource
 def bridge_db():
     return create_engine(os.environ.get("NEON_DB_URL"), echo=True, pool_pre_ping=True, pool_recycle=300 )
 
