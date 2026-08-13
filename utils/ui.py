@@ -26,7 +26,7 @@ def upload():
             uploaded = st.file_uploader("Upload multiple files dataset", type=None, accept_multiple_files=True, key=uploader_key)
             upload_button = st.form_submit_button('Submit Dataset For Upload')
     with col2:
-        selected_schema = st.selectbox("Select Target Schema To Upload Dataset To", inspect(bridge).get_schema_names())
+        selected_schema = st.selectbox("Select Target Schema To Upload Dataset To", inspect(bridge).get_schema_names()[1:])
 
     if upload_button:
         if uploaded:
