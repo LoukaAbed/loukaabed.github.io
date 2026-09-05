@@ -39,3 +39,6 @@ for pid in st.session_state['unique_patients']:
         line_width = 1.5
         line_opacity = 0.4
     fig.add_trace(go.Scatter(x=patient_data['charttime'], y=patient_data[selected_marker], mode='lines+markers', name=f'Patient {pid}', line=dict(color=line_color, width=line_width), opacity=line_opacity))
+    st.subheader(f"Longitudinal Cohort Trends: Mapped {selected_marker} Over Time")
+    st.caption(" Recruitment Hint: You may select the patient by button or clicking on the curve directly in the plot. The selected patient will be highlighted in red.")
+click_data = st.plotly_chart(fig, on_select="rerun") 
