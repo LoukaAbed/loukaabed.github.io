@@ -25,4 +25,4 @@ if 'active_patient_idx' not in st.session_state:
     st.session_state['active_patient_idx'] = 0
 st.session_state['active_patient'] = st.session_state['unique_patients'][st.session_state['active_patient_idx']]
 
-selected_marker = st.selectbox("Select a lab marker to visualize", options=['creatinine', 'hemoglobin'], layout='horizontal')
+selected_marker = st.radio("Select a lab marker to visualize", options=['creatinine', 'hemoglobin'], horizontal=True)
