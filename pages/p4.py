@@ -41,4 +41,14 @@ for pid in st.session_state['unique_patients']:
         line_width = 1.5
         line_opacity = 0.4
     fig.add_trace(go.Scatter(x=patient_data['charttime'], y=patient_data[selected_marker], mode='lines+markers', name=f'Patient {pid}', line=dict(color=line_color, width=line_width), opacity=line_opacity))
-clicked_point = st.plotly_chart(fig, use_container_width=True)
+clicked_point = st.plotly_chart(fig, use_container_width=True, on_select="rerun")
+if clicked_point and "selection" in clicked_point:
+    points_list = clicked_point["selection"].get("points", [])
+    
+    if len(points_list) > 0:
+        clicked_trace_name = points_list[0].get("trace_name", "")
+        clicked_pid = clicked_trace_name.replace("Patient ", "")
+        if clicked_pid in st.session_state['unique_patients'] and clicked_pid != st.session_state['active_patient']:
+            st.session_state['active_patient'] = clicked_pid
+            st.session_state['active_patient_idx'] = st.session_state['unique_patients'].index(clicked_pid)
+            st.rerun()
