@@ -27,6 +27,8 @@ if 'active_patient_idx' not in st.session_state:
 st.session_state['active_patient'] = st.session_state['unique_patients'][st.session_state['active_patient_idx']]
 
 selected_marker = st.radio("Select a lab marker to visualize", options=['creatinine', 'hemoglobin'], horizontal=True)
+st.subheader(f"Longitudinal Cohort Trends: Mapped {selected_marker} Over Time")
+st.caption(" Recruitment Hint: You may select the patient by button or clicking on the curve directly in the plot. The selected patient will be highlighted in red.")
 fig = go.Figure()
 for pid in st.session_state['unique_patients']:
     patient_data = df_raw[df_raw['subject_id'] == pid]
@@ -39,6 +41,4 @@ for pid in st.session_state['unique_patients']:
         line_width = 1.5
         line_opacity = 0.4
     fig.add_trace(go.Scatter(x=patient_data['charttime'], y=patient_data[selected_marker], mode='lines+markers', name=f'Patient {pid}', line=dict(color=line_color, width=line_width), opacity=line_opacity))
-    st.subheader(f"Longitudinal Cohort Trends: Mapped {selected_marker} Over Time")
-    st.caption(" Recruitment Hint: You may select the patient by button or clicking on the curve directly in the plot. The selected patient will be highlighted in red.")
-click_data = st.plotly_chart(fig, on_select="rerun") 
+clicked_point = st.plotly_chart(fig, use_container_width=True)
